@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NurislamTeaches</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf5ec;--card:#fff;--ink:#241d18;--mute:#7b6f64;--acc:#c4552d;--acc2:#2f5d62;--line:#eadfcc;--sh:0 10px 34px rgba(70,45,20,.09);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171310;--card:#241e19;--ink:#f4ece1;--mute:#a99c8d;--acc:#ec845d;--acc2:#82b9bd;--line:#3a3128;--sh:0 10px 34px rgba(0,0,0,.45)}}
+:root[data-theme="dark"]{--bg:#171310;--card:#241e19;--ink:#f4ece1;--mute:#a99c8d;--acc:#ec845d;--acc2:#82b9bd;--line:#3a3128;--sh:0 10px 34px rgba(0,0,0,.45)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,sans-serif;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(600px 400px at 85% -5%,color-mix(in srgb,var(--acc) 16%,transparent),transparent),radial-gradient(500px 400px at -5% 40%,color-mix(in srgb,var(--acc2) 14%,transparent),transparent);pointer-events:none;z-index:-1}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;margin:0;line-height:1.12}
+.hide{display:none!important}
+header{max-width:1080px;margin:0 auto;padding:20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:23px;display:flex;align-items:center;gap:10px}
+.logo b{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;display:grid;place-items:center;font-size:18px}
+.logo span{color:var(--acc)}
+.right{display:flex;align-items:center;gap:10px}
+nav{display:flex;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:4px}
+nav button,.pill{border:0;background:none;color:var(--mute);font:500 14px Inter,sans-serif;padding:8px 16px;border-radius:99px;cursor:pointer}
+nav button.on{background:var(--ink);color:var(--bg)}
+.pill{border:1px solid var(--line);background:var(--card)}
+main{max-width:1080px;margin:0 auto;padding:0 20px 70px}
+.login{min-height:calc(100vh - 90px);display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;max-width:1000px;margin:0 auto;padding:0 20px}
+.login h1{font-size:clamp(40px,7vw,68px)}.login h1 em{color:var(--acc)}
+.login .sub{color:var(--mute);font-size:18px;margin:16px 0 0;max-width:440px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:28px;box-shadow:var(--sh)}
+.box h2{font-size:26px;margin-bottom:6px}
+.tabs{display:flex;gap:6px;background:var(--bg);border-radius:12px;padding:4px;margin:14px 0 4px}
+.tabs button{flex:1;border:0;background:none;padding:9px;border-radius:9px;font:600 14px Inter,sans-serif;color:var(--mute);cursor:pointer}
+.tabs button.on{background:var(--card);color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+label{display:block;font-size:13px;font-weight:600;color:var(--mute);margin:14px 0 5px}
+input[type=text],input[type=password],textarea,select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:inherit}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--acc);outline-offset:1px}
+textarea{min-height:80px;resize:vertical}
+.btn{border:0;background:var(--acc);color:#fff;font:600 15px Inter,sans-serif;padding:13px 22px;border-radius:12px;cursor:pointer;margin-top:18px;width:100%}
+.btn.sm{width:auto;margin:0;padding:7px 13px;font-size:13px}
+.btn.ghost{background:none;color:#b3261e;border:1px solid var(--line)}
+.btn:disabled{opacity:.5;cursor:wait}
+.err{color:#b3261e;font-size:14px;margin-top:10px;min-height:20px}.ok{color:var(--acc2);font-size:14px;margin-top:10px}
+.hero{padding:26px 0 18px}.hero h1{font-size:clamp(32px,5.5vw,52px)}.hero h1 em{color:var(--acc)}
+.hero p{color:var(--mute);margin:10px 0 0}
+.bar{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 22px}
+.bar input{flex:1;min-width:180px}.chip{border:1px solid var(--line);background:var(--card);color:var(--mute);border-radius:99px;padding:8px 16px;font:500 14px Inter,sans-serif;cursor:pointer}
+.chip.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--sh);cursor:pointer;transition:transform .25s,box-shadow .25s}
+.card:hover{transform:translateY(-5px)}
+.thumb{aspect-ratio:16/9;background:linear-gradient(135deg,var(--acc),var(--acc2));position:relative;overflow:hidden}
+.thumb video{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.play{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(transparent 50%,rgba(0,0,0,.35))}
+.play i{width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.95);display:grid;place-items:center;color:var(--acc);font-style:normal;padding-left:4px}
+.num{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;z-index:1}
+.cb{padding:16px 20px 20px}.cb h3{font-size:21px}.cb p{color:var(--mute);font-size:14px;margin:6px 0 0}
+.tag{display:inline-block;font-size:12px;font-weight:600;color:var(--acc2);background:color-mix(in srgb,var(--acc2) 14%,transparent);padding:3px 11px;border-radius:99px;margin-bottom:8px}
+.player{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:16px;box-shadow:var(--sh)}
+.player video{width:100%;border-radius:16px;background:#000;display:block;max-height:72vh}
+.player h2{font-size:32px;margin:18px 6px 6px}.player p{margin:0 6px 6px;color:var(--mute)}
+.back{border:0;background:none;color:var(--acc);font:600 14px Inter,sans-serif;cursor:pointer;margin:0 0 14px;padding:0}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:var(--sh);margin-bottom:22px}
+.panel h2{font-size:25px;margin-bottom:6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.drop{border:2px dashed var(--line);border-radius:14px;padding:16px;color:var(--mute)}
+.row{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+.row b{flex:1;min-width:120px}.row small{color:var(--mute)}
+.stat{display:flex;gap:14px;margin:4px 0 22px;flex-wrap:wrap}
+.stat div{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 22px}.stat b{font:700 28px Fraunces,serif;display:block;color:var(--acc)}
+.empty{color:var(--mute);padding:26px 0}
+.cred{background:color-mix(in srgb,var(--acc2) 12%,transparent);border:1px solid var(--acc2);border-radius:14px;padding:12px 16px;margin-top:14px;font-size:14px}
+.qcard{border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin:12px 0;background:var(--bg)}
+.qcard input[type=text]{margin:4px 0}
+.opt{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:10px;cursor:pointer;margin:2px 0}
+.opt input[type=radio]{width:auto;flex:none}
+.opt.good{background:color-mix(in srgb,#2e9e5b 24%,transparent)}.opt.bad{background:color-mix(in srgb,#c0392b 24%,transparent)}
+.topics{display:flex;flex-direction:column;gap:12px}
+.topic{display:flex;align-items:center;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 20px;box-shadow:var(--sh);cursor:pointer;transition:transform .2s}
+.topic:hover{transform:translateX(4px)}.topic>div{flex:1;min-width:0}.topic h3{font-size:20px}
+.topic p{margin:2px 0 0;color:var(--mute);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tn{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;display:grid;place-items:center;font:700 17px Fraunces,serif;flex:none}
+.topic i{font-style:normal;color:var(--mute);font-size:26px}
+@media(max-width:760px){.login{grid-template-columns:1fr;gap:24px;padding-top:10px}.two{grid-template-columns:1fr}}
+
+/* ===== responsive: phones, tablets, laptops ===== */
+html{-webkit-text-size-adjust:100%}
+img,video{max-width:100%}
+.drop input{max-width:100%}
+@media(max-width:1024px){header,main{max-width:100%}.login{gap:28px}.grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}}
+@media(max-width:760px){
+  header{padding:14px 16px;flex-wrap:wrap}
+  main{padding:0 16px 56px}
+  .logo{font-size:20px}.logo b{width:30px;height:30px;font-size:16px}
+  nav button,.pill{padding:9px 14px}
+  .login{min-height:auto;padding:8px 16px 40px}
+  .login h1{font-size:clamp(34px,10vw,46px)}.login .sub{font-size:16px}
+  .box{padding:22px;border-radius:22px}
+  .hero{padding:14px 0 10px}.hero h1{font-size:clamp(28px,8vw,38px)}
+  .bar input{flex:1 1 100%;min-width:0}
+  .topic{flex-wrap:wrap;padding:14px 16px;gap:12px}
+  .topic>div{flex:1 1 55%}
+  .topic p{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .topic .tag{order:3}.topic i{display:none}
+  .panel{padding:18px;border-radius:20px}
+  .player{padding:12px;border-radius:20px}.player h2{font-size:24px;margin:14px 4px 4px}
+  .stat div{flex:1 1 40%;padding:12px 16px}
+  .row{align-items:flex-start}
+  .row .btn.sm,.row select{margin-left:auto}
+  .btn{padding:14px 20px}
+}
+@media(max-width:420px){
+  .right{width:100%;justify-content:space-between}
+  nav{flex:1}nav button{flex:1;padding:9px 8px}
+  .logo{font-size:18px}
+}
+@media(hover:none){.topic:hover,.card:hover{transform:none}}
+@media(min-width:1400px){header,main{max-width:1180px}}
+.levels{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 14px}
+.chip.locked{opacity:.45;cursor:not-allowed}
+@media(max-width:760px){.levels{flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch}.levels .chip{white-space:nowrap;flex:none}}
+
+/* ===== polished buttons ===== */
+:root{--danger:#c0392b;--glow:color-mix(in srgb,var(--acc) 38%,transparent)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--danger:#ff8a80}}
+:root[data-theme="dark"]{--danger:#ff8a80}
+button{-webkit-tap-highlight-color:transparent}
+.btn,.chip,nav button,.pill,.back,.tabs button{transition:transform .18s ease,box-shadow .18s ease,background .18s ease,color .18s ease,border-color .18s ease,filter .18s ease}
+.btn{position:relative;overflow:hidden;border:0;border-radius:14px;padding:14px 26px;font:600 15px Inter,sans-serif;letter-spacing:.2px;color:#fff;
+  background:linear-gradient(135deg,var(--acc) 0%,color-mix(in srgb,var(--acc) 60%,#ffb36b) 100%);
+  box-shadow:0 10px 24px var(--glow),inset 0 1px 0 rgba(255,255,255,.28)}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.28) 50%,transparent 70%);transform:translateX(-120%);transition:transform .6s ease}
+.btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 16px 32px var(--glow),inset 0 1px 0 rgba(255,255,255,.35)}
+.btn:hover:not(:disabled)::after{transform:translateX(120%)}
+.btn:active:not(:disabled){transform:translateY(0) scale(.98);box-shadow:0 6px 14px var(--glow)}
+.btn:disabled{opacity:.55;filter:saturate(.6)}
+.btn:focus-visible,.chip:focus-visible,nav button:focus-visible,.pill:focus-visible,.back:focus-visible{outline:3px solid color-mix(in srgb,var(--acc2) 55%,transparent);outline-offset:3px}
+.btn.sm{padding:9px 18px;border-radius:99px;font-size:13px;box-shadow:0 6px 14px var(--glow),inset 0 1px 0 rgba(255,255,255,.28)}
+.btn[style*="--acc2"]{background:linear-gradient(135deg,var(--acc2),color-mix(in srgb,var(--acc2) 55%,#fff))!important;box-shadow:0 8px 20px color-mix(in srgb,var(--acc2) 38%,transparent),inset 0 1px 0 rgba(255,255,255,.3)!important;color:#fff}
+.btn.ghost{background:transparent!important;color:var(--danger);border:1.5px solid color-mix(in srgb,var(--danger) 45%,transparent);box-shadow:none!important;padding:8px 16px}
+.btn.ghost::after{display:none}
+.btn.ghost:hover:not(:disabled){background:color-mix(in srgb,var(--danger) 12%,transparent)!important;border-color:var(--danger);transform:translateY(-1px)}
+/* level tabs & filter chips */
+.chip{border:1.5px solid var(--line);background:var(--card);color:var(--mute);border-radius:99px;padding:10px 20px;font:600 14px Inter,sans-serif;cursor:pointer;box-shadow:0 2px 8px rgba(60,40,20,.05)}
+.chip:hover:not(:disabled){transform:translateY(-2px);border-color:var(--acc);color:var(--acc);box-shadow:0 8px 18px rgba(60,40,20,.1)}
+.chip.on{background:linear-gradient(135deg,var(--acc),color-mix(in srgb,var(--acc) 60%,#ffb36b));border-color:transparent;color:#fff;box-shadow:0 8px 20px var(--glow)}
+.chip.on:hover{color:#fff}
+.chip.locked{opacity:.5;border-style:dashed;box-shadow:none;cursor:not-allowed;background:transparent}
+/* top menu */
+nav{padding:5px;box-shadow:0 4px 14px rgba(60,40,20,.06)}
+nav button{font-weight:600;padding:9px 20px}
+nav button:hover:not(.on){color:var(--ink);background:color-mix(in srgb,var(--ink) 7%,transparent)}
+nav button.on{background:linear-gradient(135deg,var(--ink),color-mix(in srgb,var(--ink) 75%,var(--acc)));color:var(--bg);box-shadow:0 6px 14px rgba(0,0,0,.2)}
+.pill{font-weight:600;padding:10px 20px;border:1.5px solid var(--line);box-shadow:0 4px 14px rgba(60,40,20,.06)}
+.pill:hover{transform:translateY(-2px);border-color:var(--acc);color:var(--acc)}
+/* login tabs */
+.tabs{padding:5px;border-radius:14px}
+.tabs button{padding:10px;border-radius:10px;cursor:pointer}
+.tabs button.on{background:var(--card);color:var(--acc);box-shadow:0 4px 12px rgba(0,0,0,.12)}
+/* back button */
+.back{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1.5px solid var(--line);border-radius:99px;padding:9px 18px;margin:0 0 16px;font-weight:600;box-shadow:0 4px 12px rgba(60,40,20,.06)}
+.back:hover{transform:translateX(-3px);border-color:var(--acc)}
+/* file picker button */
+input[type=file]{font:inherit;color:var(--mute);max-width:100%}
+input[type=file]::file-selector-button{border:0;margin-right:12px;padding:9px 18px;border-radius:99px;cursor:pointer;font:600 13px Inter,sans-serif;color:#fff;background:linear-gradient(135deg,var(--acc2),color-mix(in srgb,var(--acc2) 55%,#fff));box-shadow:0 6px 14px color-mix(in srgb,var(--acc2) 35%,transparent);transition:transform .18s ease}
+input[type=file]::file-selector-button:hover{transform:translateY(-2px)}
+/* answer options */
+.opt{border:1.5px solid transparent;transition:background .15s,border-color .15s}
+.opt:hover{background:color-mix(in srgb,var(--acc2) 10%,transparent);border-color:var(--line)}
+@media(hover:none){.btn:hover:not(:disabled),.chip:hover:not(:disabled),.pill:hover,.back:hover{transform:none}}
+
+/* ===== aesthetic upgrade ===== */
+html{scroll-behavior:smooth}
+::selection{background:color-mix(in srgb,var(--acc) 30%,transparent)}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes float{from{transform:translate(0,0) scale(1)}to{transform:translate(36px,46px) scale(1.12)}}
+.blob{position:fixed;border-radius:50%;filter:blur(70px);opacity:.32;z-index:-1;pointer-events:none;animation:float 14s ease-in-out infinite alternate}
+.b1{width:360px;height:360px;background:var(--acc);top:-100px;right:-80px}
+.b2{width:320px;height:320px;background:var(--acc2);bottom:-100px;left:-90px;animation-delay:-6s}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .blob{opacity:.16}}
+:root[data-theme="dark"] .blob{opacity:.16}
+/* floating glass header */
+header{position:sticky;top:10px;z-index:20;width:calc(100% - 24px);max-width:1080px;margin:12px auto 8px;padding:12px 20px;border:1px solid var(--line);border-radius:22px;background:color-mix(in srgb,var(--card) 72%,transparent);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:var(--sh)}
+.logo b{box-shadow:0 8px 18px var(--glow);transition:transform .3s}
+.logo:hover b{transform:rotate(-8deg) scale(1.08)}
+/* login */
+.login h1 em{background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.perks{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.perks span{background:color-mix(in srgb,var(--card) 85%,transparent);border:1px solid var(--line);border-radius:99px;padding:9px 16px;font-weight:600;font-size:14px;box-shadow:0 6px 16px rgba(60,40,20,.06)}
+.box{position:relative;overflow:hidden;background:color-mix(in srgb,var(--card) 88%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.box::before,.panel::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,var(--acc),var(--acc2))}
+.panel{position:relative;overflow:hidden}
+/* inputs */
+input[type=text],input[type=password],textarea,select{border-width:1.5px;border-radius:14px;transition:border-color .2s,box-shadow .2s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 4px color-mix(in srgb,var(--acc) 18%,transparent)}
+/* hero banner */
+#vL .hero{position:relative;overflow:hidden;color:#fff;border-radius:30px;padding:36px 34px;margin:10px 0 24px;background:linear-gradient(120deg,#c4552d 0%,#d9774a 48%,#2f5d62 125%);box-shadow:0 20px 44px rgba(196,85,45,.28)}
+#vL .hero::before{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-60px;top:-90px;background:rgba(255,255,255,.14)}
+#vL .hero::after{content:"";position:absolute;width:160px;height:160px;border-radius:50%;right:120px;bottom:-90px;background:rgba(255,255,255,.1)}
+#vL .hero h1{color:#fff;position:relative}#vL .hero h1 em{color:#ffe7d8}#vL .hero p{color:rgba(255,255,255,.88);position:relative;margin-top:12px}
+/* lesson rows */
+.topic{position:relative;overflow:hidden}
+.topic::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(var(--acc),var(--acc2));opacity:0;transition:opacity .2s}
+.topic:hover::before{opacity:1}
+.topic:hover{box-shadow:0 16px 36px rgba(60,40,20,.14)}
+.topic[data-hw]{margin-left:26px;border-style:dashed;background:color-mix(in srgb,var(--card) 70%,transparent)}
+.topic[data-hw]::before{opacity:1;background:var(--acc2)}
+.tn{box-shadow:0 8px 16px var(--glow)}
+.tag[data-l="0"]{--lc:#2e9e5b}.tag[data-l="1"]{--lc:#1f8f9d}.tag[data-l="2"]{--lc:#3f6fd1}.tag[data-l="3"]{--lc:#8a52c9}.tag[data-l="4"]{--lc:#c4552d}
+.tag[data-l]{color:var(--lc);background:color-mix(in srgb,var(--lc) 15%,transparent)}
+/* player + tests */
+.player{position:relative}
+.player video{box-shadow:0 22px 50px rgba(0,0,0,.28)}
+.qcard{background:color-mix(in srgb,var(--card) 55%,var(--bg));border-radius:18px}
+/* admin stats */
+.stat div{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:150px;box-shadow:var(--sh);color:var(--mute);font-weight:500}
+.stat i{font-style:normal;font-size:22px}
+.stat b{background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent;font-size:34px}
+.row{transition:background .15s}
+/* footer */
+.foot{text-align:center;color:var(--mute);font-size:13px;padding:6px 0 34px}
+/* entrance animations */
+.box,.panel,.player,#vL .hero,.perks,.stat div{animation:rise .55s cubic-bezier(.2,.7,.2,1) both}
+.topic{animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
+.topic:nth-child(2){animation-delay:.05s}.topic:nth-child(3){animation-delay:.1s}.topic:nth-child(4){animation-delay:.15s}.topic:nth-child(5){animation-delay:.2s}.topic:nth-child(6){animation-delay:.25s}.topic:nth-child(n+7){animation-delay:.3s}
+@media(max-width:760px){
+  header{top:6px;width:calc(100% - 16px);margin:8px auto 6px;padding:10px 14px;border-radius:18px}
+  #vL .hero{padding:26px 22px;border-radius:24px}
+  .topic[data-hw]{margin-left:14px}
+  .stat div{min-width:0}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+input[type=number]{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:14px;background:var(--bg);color:var(--ink);font:inherit}
+#vB .hero{position:relative;overflow:hidden;color:#fff;border-radius:30px;padding:34px;margin:10px 0 22px;background:linear-gradient(120deg,#e8912d 0%,#c4552d 55%,#2f5d62 130%);box-shadow:0 20px 44px rgba(196,85,45,.28)}
+#vB .hero::before{content:"";position:absolute;width:240px;height:240px;border-radius:50%;right:-50px;top:-90px;background:rgba(255,255,255,.14)}
+#vB .hero h1,#vB .hero p{color:#fff;position:relative}#vB .hero h1 em{color:#fff2cf}#vB .hero p{margin-top:10px;color:rgba(255,255,255,.9)}
+.lbrow{cursor:default}.lbrow:hover{transform:none}
+.lbrow.me{border-color:var(--acc);box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 22%,transparent),var(--sh)}
+.lbrow:nth-child(1) .tn{background:linear-gradient(135deg,#f9d45c,#e0902a);font-size:22px}
+.lbrow:nth-child(2) .tn{background:linear-gradient(135deg,#dfe4ea,#9aa5b1);font-size:22px}
+.lbrow:nth-child(3) .tn{background:linear-gradient(135deg,#e7b27c,#b9733a);font-size:22px}
+.xp{font:700 20px Fraunces,Georgia,serif;white-space:nowrap;background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+@media(max-width:420px){nav button{font-size:13px;padding:9px 6px}}
+@media(max-width:760px){#vB .hero{padding:24px 20px;border-radius:24px}}
+/* homework row = same look as the lesson row */
+.topic[data-hw]{margin-left:0;border-style:solid;background:var(--card)}
+.topic[data-hw]::before{opacity:0;background:linear-gradient(var(--acc),var(--acc2))}
+.topic[data-hw]:hover::before{opacity:1}
+.topic.hw-wait .tag{color:#9a6a00;background:rgba(240,180,40,.24)}
+.topic.hw-done{border:1.5px solid #2e9e5b;background:color-mix(in srgb,#2e9e5b 11%,var(--card));box-shadow:0 12px 28px rgba(46,158,91,.2)}
+.topic.hw-done::before,.topic.hw-done:hover::before{opacity:1;background:#2e9e5b}
+.topic.hw-done .tn{background:linear-gradient(135deg,#3cc274,#1f8a4c)!important;box-shadow:0 8px 16px rgba(46,158,91,.38)}
+.topic.hw-done .tag{color:#fff;background:#2e9e5b}
+.topic.hw-done h3{color:#1f7a45}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .topic.hw-done h3{color:#6ee0a0}}
+@media(max-width:760px){.topic[data-hw]{margin-left:0}}
+/* ===== lesson group: lesson + homework behind it ===== */
+.lgroup{background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:var(--sh);overflow:hidden;animation:rise .5s cubic-bezier(.2,.7,.2,1) both;transition:box-shadow .25s,border-color .25s}
+.lgroup:nth-child(2){animation-delay:.05s}.lgroup:nth-child(3){animation-delay:.1s}.lgroup:nth-child(4){animation-delay:.15s}.lgroup:nth-child(n+5){animation-delay:.2s}
+.lgroup .topic{border:0;box-shadow:none;border-radius:0;background:transparent;animation:none;margin:0}
+.lgroup .topic:hover{transform:none;background:color-mix(in srgb,var(--acc) 6%,transparent)}
+.lgroup .topic.hwsub{border-top:1.5px dashed var(--line);background:color-mix(in srgb,var(--acc2) 6%,transparent);padding-left:36px}
+.lgroup .topic.hwsub .tn{width:36px;height:36px;border-radius:11px}
+.lgroup .topic.hwsub:hover{background:color-mix(in srgb,var(--acc2) 13%,transparent)}
+.lgroup .topic.hwsub.locked{opacity:.72}
+.lgroup .topic.hwsub.locked .tag{color:var(--mute);background:color-mix(in srgb,var(--ink) 8%,transparent)}
+.lgroup .topic.hwsub.locked .tn{filter:grayscale(.55)}
+.lgroup.hw-wait .hwsub .tag{color:#9a6a00;background:rgba(240,180,40,.24)}
+.lgroup.hw-done{border:1.5px solid #2e9e5b;box-shadow:0 14px 32px rgba(46,158,91,.2)}
+.lgroup.hw-done .hwsub{background:color-mix(in srgb,#2e9e5b 14%,transparent);border-top-color:#2e9e5b}
+.lgroup.hw-done .hwsub .tn{background:linear-gradient(135deg,#3cc274,#1f8a4c)!important;box-shadow:0 8px 16px rgba(46,158,91,.38)}
+.lgroup.hw-done .hwsub .tag{color:#fff;background:#2e9e5b}
+.lgroup.hw-done .hwsub h3{color:#1f7a45}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lgroup.hw-done .hwsub h3{color:#6ee0a0}}
+.steps{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.steps span{font-size:12.5px;font-weight:600;padding:4px 11px;border-radius:99px;border:1px solid var(--line);color:var(--mute);background:color-mix(in srgb,var(--bg) 60%,transparent)}
+.steps span.ok{color:#fff;background:#2e9e5b;border-color:#2e9e5b}
+.pbar{height:10px;border-radius:99px;background:rgba(255,255,255,.28);margin-top:18px;max-width:420px;overflow:hidden;position:relative}
+.pbar i{display:block;height:100%;border-radius:99px;background:#fff;transition:width .6s ease}
+#prog small{display:block;margin-top:8px;color:rgba(255,255,255,.92);font-weight:600;position:relative}
+#prog .pbar{position:relative}
+@media(max-width:760px){.lgroup .topic.hwsub{padding-left:20px}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+<div class="blob b1"></div><div class="blob b2"></div>
+<header>
+  <div class="logo"><b>N</b><div>Nurislam<span>Teaches</span></div></div>
+  <div class="right"><nav id="nav" class="hide"><button id="tL" class="on">Lessons</button><button id="tB">🏆 Leaderboard</button><button id="tA" class="hide">Admin</button></nav><button class="pill hide" id="out">Log out</button></div>
+</header>
+
+<div id="login" class="login">
+  <div>
+    <h1>Learn English <em>with Nurislam.</em></h1>
+    <p class="sub">Your personal video lessons, any time you want. Log in with the username and password from your teacher.</p>
+    <div class="perks"><span>🎬 Video lessons</span><span>✅ Quick tests</span><span>📝 Homework feedback</span></div>
+  </div>
+  <div class="box">
+    <h2>Welcome back</h2><p style="color:var(--mute);margin:0 0 4px">Log in with your username and password.</p>
+    <div class="tabs"><button id="mS" class="on" type="button">Student</button><button id="mA" type="button">Admin</button></div>
+        <label>Username</label><input type="text" id="lu" autocomplete="username" autocapitalize="off">
+    <label>Password</label><input type="password" id="lp" autocomplete="current-password">
+    <button class="btn" id="lb">Log in</button>
+    <div class="err" id="le"></div>
+  </div>
+</div>
+
+<main id="app" class="hide">
+  <section id="vL">
+    <div class="hero"><h1>Hello, <em id="who">student</em> 👋</h1><p>Pick a lesson and press play.</p><div id="prog"></div></div>
+    <div id="chips" class="levels"></div>
+    <div class="bar"><input type="text" id="q" placeholder="Search lessons…"></div>
+    <div id="grid" class="topics"></div>
+    <div id="empty" class="empty hide">No lessons found.</div>
+  </section>
+  <section id="vP" class="hide">
+    <button class="back" id="back">← All lessons</button>
+    <div class="player"><video id="pv" controls playsinline controlsList="nodownload noplaybackrate" disablePictureInPicture></video><h2 id="pt"></h2><p id="pd"></p><span class="tag" id="pl" style="margin:8px 6px"></span><div id="flow" style="margin:12px 6px 6px"></div></div>
+    <div class="player hide" id="testBox" style="margin-top:20px"></div>
+  </section>
+  <section id="vH" class="hide">
+    <button class="back" id="hwBack">← All lessons</button><div class="player" id="hwBox"></div>
+  </section>
+  <section id="vB" class="hide">
+    <div class="hero"><h1>🏆 <em>Leaderboard</em></h1><p id="lbMe">Students ranked by XP.</p></div>
+    <div id="lbTabs" class="levels"><button class="chip on" data-t="all">All students</button><button class="chip" data-t="grp">My group</button><button class="chip" data-t="groups">Groups</button></div>
+    <div id="lbList" class="topics"></div>
+    <div class="panel" style="margin-top:22px"><h3 style="margin-bottom:8px">How to earn XP</h3><p style="margin:0;color:var(--mute)">🎯 Test: all answers correct = <b>30 XP</b>, every mistake takes away 3 XP (your best try counts).<br>📝 Homework: up to <b>70 XP</b>, given by your teacher when they check it.<br>⭐ Your teacher can also give extra XP.</p></div>
+  </section>
+  <section id="vA" class="hide">
+    <div class="stat"><div><i>🎬</i><b id="nL">0</b>lessons</div><div><i>🎓</i><b id="nS">0</b>students</div><div><i>📝</i><b id="nH">0</b>homework to check</div></div>
+    <div class="panel">
+      <h2>Add a student</h2><p style="color:var(--mute);margin:0">Create a username and password, then send them to your student.</p>
+      <div class="two"><div><label>Full name</label><input type="text" id="sN"></div><div><label>Username</label><input type="text" id="sU" autocapitalize="off"></div></div>
+      <label>Password</label><div style="display:flex;gap:8px"><input type="text" id="sP"><button class="btn sm" id="gen" type="button" style="background:var(--acc2)">Generate</button></div>
+      <label>English level</label><select id="sL"></select>
+      <label>Group</label><select id="sG"></select>
+      <button class="btn" id="sB">Add student</button><div id="sM"></div>
+    </div>
+    <div class="panel"><h2>Students</h2><div id="sList"></div></div>
+    <div class="panel">
+      <h2>Add a lesson</h2>
+      <label>Title</label><input type="text" id="aT" placeholder="e.g. Present Perfect">
+      <label>Description</label><textarea id="aD" placeholder="What will students learn?"></textarea>
+      <div class="two"><div><label>Level</label><select id="aLv"></select></div>
+      <div><label>Video (MP4, up to 500 MB)</label><div class="drop"><input type="file" id="aF" accept="video/*"></div></div></div>
+      <button class="btn" id="aS">Upload lesson</button><div id="aM"></div>
+    </div>
+    <div class="panel"><h2>Your lessons</h2><div id="aList"></div></div>
+    <div class="panel"><h2>Lesson test &amp; homework</h2><p style="color:var(--mute);margin:0">Pick a lesson, add multiple-choice questions, tick the correct answer, and save. Saving replaces that lesson's old test.</p>
+      <label>Lesson</label><select id="tLs"></select>
+      <div id="qb"></div>
+      <button class="btn sm" id="addQ" type="button" style="background:var(--acc2);margin-top:12px">+ Add question</button>
+      <button class="btn" id="saveT">Save test</button><div id="tM"></div>
+      <h3 style="margin:26px 0 4px">Homework task</h3><p style="color:var(--mute);margin:0">What should students do after this lesson? (Uses the lesson chosen above.)</p>
+      <textarea id="hwT" placeholder="e.g. Write 5 sentences using past simple and past perfect."></textarea>
+      <button class="btn" id="saveHw">Save homework task</button><div id="hwM"></div>
+    </div>
+    <div class="panel"><h2>Homework to check</h2><div id="hwList"></div></div>
+  </section>
+</main>
+<footer class="foot">NurislamTeaches · keep learning ✨</footer>
+
+<script>
+/* ====== PUT YOUR SUPABASE DETAILS HERE ====== */
+const SUPABASE_URL='https://uvphdcjfrdofydfqdzrg.supabase.co';
+const SUPABASE_ANON_KEY='sb_publishable_Zz8iBHd7mwIwIs33WFsD8w_9biFTX2c';
+/* ============================================ */
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const emailOf=u=>u.toLowerCase().trim()+'@nurislamteaches.app';
+let lessons=[],students=[],me=null,filter='All',mode='S',myHw={},xpMap={},tested={},hasTest={};
+const MAXMB=500,LEVELS=['Beginner','Elementary','Pre-Intermediate','Intermediate','Advanced'];
+['aLv','sL'].forEach(id=>$(id).innerHTML=LEVELS.map(x=>`<option>${x}</option>`).join(''));$('aLv').value='Intermediate';
+const GROUPS=Array.from({length:31},(_,i)=>'Junior '+(i+1));
+$('sG').innerHTML='<option value="">No group</option>'+GROUPS.map(x=>`<option>${x}</option>`).join('');
+
+function show(v){['vL','vP','vH','vB','vA'].forEach(x=>$(x).classList.toggle('hide',x!==v));
+  $('tL').classList.toggle('on',v==='vL'||v==='vP'||v==='vH');$('tB').classList.toggle('on',v==='vB');$('tA').classList.toggle('on',v==='vA');
+  if(v!=='vP'){$('pv').pause();$('testBox').classList.add('hide')}scrollTo(0,0)}
+$('tL').onclick=()=>{render();show('vL')};$('tA').onclick=()=>show('vA');$('back').onclick=()=>{render();show('vL')};
+['lu','lp'].forEach(i=>$(i).addEventListener('keydown',e=>{if(e.key==='Enter')$('lb').click()}));
+
+function setMode(m){mode=m;$('mS').classList.toggle('on',m==='S');$('mA').classList.toggle('on',m==='A');$('le').textContent='';
+  $('lu').placeholder=m==='A'?'Admin username':'';}
+$('mS').onclick=()=>setMode('S');$('mA').onclick=()=>setMode('A');
+$('lb').onclick=async()=>{
+  const u=$('lu').value.trim(),p=$('lp').value;$('le').textContent='';
+  if(!u||!p){$('le').textContent='Enter your username and password.';return}
+  $('lb').disabled=true;
+  const {error}=await sb.auth.signInWithPassword({email:emailOf(u),password:p});
+  $('lb').disabled=false;
+  if(error){$('le').textContent='Wrong username or password.';return}
+  await start(mode==='A');
+};
+async function start(adminOnly){
+  const {data:{user}}=await sb.auth.getUser();if(!user)return;
+  const {data:prof}=await sb.from('profiles').select('*').eq('id',user.id).single();
+  if(!prof||!prof.active){await sb.auth.signOut();$('le').textContent='Your account is not active. Ask your teacher.';return}
+  if(adminOnly&&prof.role!=='admin'){await sb.auth.signOut();$('le').textContent='This account is not an admin.';return}
+  me=prof;enter();
+}
+async function enter(){
+  $('login').classList.add('hide');$('app').classList.remove('hide');$('nav').classList.remove('hide');$('out').classList.remove('hide');
+  $('tA').classList.toggle('hide',me.role!=='admin');$('who').textContent=me.full_name.split(' ')[0];document.querySelector('#lbTabs [data-t="grp"]').classList.toggle('hide',me.role==='admin');
+  document.querySelector('.hero p').textContent=me.role==='student'?'Your level: '+me.level+'. You can open your level and the levels below it. Open a topic to watch the video and do the test, then its Homework.':'Pick a topic to watch the video and do the test.';
+  filter=me.role==='student'?me.level:'All';
+  await loadLessons();await loadMyHw();await loadProgress();if(me.role==='admin'){await loadStudents();loadHw()}
+  show(me.role==='admin'?'vA':'vL');render();
+}
+$('out').onclick=async()=>{await sb.auth.signOut();me=null;$('lp').value='';['app','nav','out'].forEach(x=>$(x).classList.add('hide'));$('login').classList.remove('hide');$('pv').pause()};
+
+async function loadLessons(){
+  const {data}=await sb.from('lessons').select('*').order('created_at');
+  lessons=data||[];
+  if(lessons.length){
+    const {data:urls}=await sb.storage.from('videos').createSignedUrls(lessons.map(l=>l.video_path),7200);
+    const m={};(urls||[]).forEach(x=>m[x.path]=x.signedUrl);
+    lessons.forEach(l=>l.url=m[l.video_path]||'');
+  }
+}
+async function loadStudents(){
+  const {data}=await sb.from('profiles').select('*').eq('role','student').order('full_name');
+  students=data||[];
+  const {data:l}=await sb.rpc('leaderboard');xpMap={};(l||[]).forEach(r=>xpMap[r.id]=r.xp);
+}
+function render(){
+  const adm=me&&me.role==='admin',myR=me?LEVELS.indexOf(me.level):0,ef=adm?filter:(LEVELS.indexOf(filter)>=0&&LEVELS.indexOf(filter)<=myR?filter:(me?me.level:'All')),lv=adm?['All',...LEVELS]:LEVELS,q=$('q').value.toLowerCase();
+  $('chips').innerHTML=lv.map(x=>{const lock=!adm&&LEVELS.indexOf(x)>myR;return `<button class="chip ${x===ef?'on':''} ${lock?'locked':''}" data-c="${esc(x)}" ${lock?'disabled':''}>${lock?'🔒 ':''}${esc(x)}</button>`}).join('');
+  document.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{filter=b.dataset.c;render()});
+  const list=lessons.map((l,i)=>({...l,n:i+1})).filter(l=>(ef==='All'||l.level===ef)&&((l.title||'')+(l.description||'')).toLowerCase().includes(q));
+  $('empty').classList.toggle('hide',list.length>0);
+  const hs=h=>!h?'To do':h.status==='checked'?'✓ Checked'+(h.grade?' · '+esc(h.grade):''):'Waiting for check',hcls=h=>!h?'':h.status==='checked'?'hw-done':'hw-wait';
+  $('grid').innerHTML=list.map(l=>{
+    const h=myHw[l.id],done=!adm&&!!h&&h.status==='checked',vd=!adm&&vDone(l),td=!adm&&tDone(l),open=adm||(vd&&td);
+    const steps=adm?'':`<div class="steps"><span class="${vd?'ok':''}">${vd?'✓ ':''}🎬 Video</span>${hasTest[l.id]?`<span class="${vd&&td?'ok':''}">${vd&&td?'✓ ':''}✅ Test</span>`:''}<span class="${done?'ok':''}">${done?'✓ ':''}📝 Homework</span></div>`;
+    return `<div class="lgroup ${adm?'':hcls(h)}"><div class="topic" data-id="${l.id}"><span class="tn">${l.n}</span><div><h3>${esc(l.title)}</h3><p>${esc(l.description)}</p>${steps}</div><span class="tag" data-l="${LEVELS.indexOf(l.level)}" style="margin:0">${esc(l.level)}</span><i>›</i></div>`
+      +`<div class="topic hwsub ${open?'':'locked'}" data-hw="${l.id}"><span class="tn" style="background:var(--acc2);font-size:20px">${done?'✓':open?'📝':'🔒'}</span><div><h3>${esc(l.title)} (Homework)</h3><p>${esc(l.homework_task||'Send your homework for this lesson')}</p></div><span class="tag" style="margin:0">${adm?'Homework':open?hs(h):'🔒 After the lesson'}</span><i>›</i></div></div>`}).join('');
+  document.querySelectorAll('[data-hw]').forEach(c=>c.onclick=()=>{const l=lessons.find(x=>x.id===c.dataset.hw);if(c.classList.contains('locked')){openL(l);return}show('vH');openHw(l)});
+  if(!adm){const total=lessons.length,dn=lessons.filter(l=>vDone(l)&&tDone(l)&&myHw[l.id]).length;$('prog').innerHTML=total?`<div class="pbar"><i style="width:${Math.round(dn/total*100)}%"></i></div><small>${dn} of ${total} lessons completed</small>`:''}else $('prog').innerHTML='';
+  document.querySelectorAll('.topic[data-id]').forEach(c=>c.onclick=()=>{openL(lessons.find(x=>x.id===c.dataset.id))});
+  if(me&&me.role==='admin')fillLs();
+  $('nL').textContent=lessons.length;$('nS').textContent=students.length;
+  $('aList').innerHTML=lessons.length?lessons.map(l=>`<div class="row"><b>${esc(l.title)}</b><span class="tag" data-l="${LEVELS.indexOf(l.level)}" style="margin:0">${esc(l.level)}</span><button class="btn sm ghost" data-dl="${l.id}">Delete</button></div>`).join(''):'<div class="empty">No lessons yet.</div>';
+  document.querySelectorAll('[data-dl]').forEach(b=>b.onclick=async()=>{const l=lessons.find(x=>x.id===b.dataset.dl);if(!confirm('Delete "'+l.title+'"?'))return;
+    await sb.storage.from('videos').remove([l.video_path]);const {error}=await sb.from('lessons').delete().eq('id',l.id);
+    if(error)return alert(error.message);await loadLessons();render()});
+  $('sList').innerHTML=students.length?students.map(s=>`<div class="row"><b>${esc(s.full_name)}<br><small>@${esc(s.username)} · ${xpMap[s.id]||0} XP ${s.active?'':'· disabled'}</small></b><select data-gp="${s.id}" style="width:auto;padding:7px 10px"><option value="">No group</option>${GROUPS.map(x=>`<option ${x===s.group_name?'selected':''}>${x}</option>`).join('')}</select><button class="btn sm" data-xp="${s.id}" type="button">± XP</button><select data-lv="${s.id}" style="width:auto;padding:7px 10px">${LEVELS.map(x=>`<option ${x===s.level?'selected':''}>${x}</option>`).join('')}</select><button class="btn sm ghost" data-ts="${s.id}">${s.active?'Disable':'Enable'}</button></div>`).join(''):'<div class="empty">No students yet.</div>';
+  document.querySelectorAll('[data-ts]').forEach(b=>b.onclick=async()=>{const s=students.find(x=>x.id===b.dataset.ts);
+    const {error}=await sb.from('profiles').update({active:!s.active}).eq('id',s.id);if(error)return alert(error.message);await loadStudents();render()});
+}
+$('q').oninput=render;
+
+$('gen').onclick=()=>{const w=['sun','moon','star','river','tiger','maple','cloud','pearl','eagle','lemon'];$('sP').value=w[Math.random()*10|0]+w[Math.random()*10|0]+(100+Math.random()*900|0)};
+$('sB').onclick=async()=>{
+  const n=$('sN').value.trim(),u=$('sU').value.trim().toLowerCase().replace(/[^a-z0-9._-]/g,''),p=$('sP').value,m=$('sM');
+  if(!n||!u||p.length<6){m.className='err';m.textContent='Fill in name, username and a password (6+ characters).';return}
+  $('sB').disabled=true;
+  // a separate, non-persistent client so the admin stays logged in
+  const tmp=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
+  const {data,error}=await tmp.auth.signUp({email:emailOf(u),password:p,options:{data:{username:u,full_name:n,level:$('sL').value,group:$('sG').value}}});
+  if(error||!data.user){m.className='err';m.textContent='Failed: '+(error?error.message:'unknown error');$('sB').disabled=false;return}
+  const {error:e2}=await sb.from('profiles').update({active:true}).eq('id',data.user.id);
+  $('sB').disabled=false;
+  if(e2){m.className='err';m.textContent='Account created but could not activate: '+e2.message;return}
+  m.className='';m.innerHTML=`<div class="cred">✅ Student added. Send them this:<br><b>Username:</b> ${esc(u)}<br><b>Password:</b> ${esc(p)}<br><small>The password is shown only now — it can't be viewed later.</small></div>`;
+  $('sN').value=$('sU').value=$('sP').value='';await loadStudents();render();
+};
+$('aS').onclick=async()=>{
+  const f=$('aF').files[0],t=$('aT').value.trim(),m=$('aM'),b=$('aS');m.className='err';
+  if(!t||!f){m.textContent='Add a title and choose a video.';return}
+  if(f.size>MAXMB*1024*1024){m.textContent='Video is over '+MAXMB+' MB. Compress it first.';return}
+  b.disabled=true;m.className='ok';m.textContent='Uploading… big videos can take several minutes. Keep this page open.';
+  const path=crypto.randomUUID()+'.mp4';
+  const up=await sb.storage.from('videos').upload(path,f,{contentType:f.type||'video/mp4'});
+  if(up.error){m.className='err';m.textContent='Upload failed: '+up.error.message+(/size|exceed|large|413/i.test(up.error.message)?' — Supabase\'s free plan allows only 50 MB per file. Compress the video, or upgrade Supabase to Pro and raise the Global file size limit in Storage settings.':'');b.disabled=false;return}
+  const {error}=await sb.from('lessons').insert({title:t,description:$('aD').value.trim(),level:$('aLv').value,video_path:path});
+  b.disabled=false;
+  if(error){m.className='err';m.textContent='Failed: '+error.message;return}
+  $('aT').value=$('aD').value=$('aF').value='';m.textContent='Lesson added!';await loadLessons();render();
+};
+$('q').oninput=render;
+
+/* ---- admin: change student level ---- */
+document.addEventListener('change',async e=>{const d=e.target.dataset||{};
+  if(d.lv){const {error}=await sb.from('profiles').update({level:e.target.value}).eq('id',d.lv);if(error)alert(error.message);else await loadStudents()}
+  else if(d.gp!==undefined){const {error}=await sb.from('profiles').update({group_name:e.target.value||null}).eq('id',d.gp);if(error)alert(error.message);else await loadStudents()}});
+/* admin: give / take XP */
+document.addEventListener('click',async e=>{const id=e.target.dataset&&e.target.dataset.xp;if(!id)return;
+  const v=prompt('How many XP do you want to give? (type a minus number, like -10, to take XP away)');if(v===null)return;
+  const n=parseInt(v,10);if(!Number.isFinite(n)||n===0){alert('Please type a whole number, like 20 or -10.');return}
+  const note=prompt('Reason (optional):');
+  const {error}=await sb.rpc('admin_give_xp',{p_student:id,p_points:n,p_note:note||null});
+  if(error)alert(error.message);else{await loadStudents();render()}});
+/* ---- admin: test builder ---- */
+let qn=0;
+function qBlock(q){qn++;const n=qn,o=(q&&q.options)||[];
+  return `<div class="qcard"><input type="text" class="qq" placeholder="Question" value="${esc(q?q.question:'')}">`+[0,1,2,3].map(i=>`<div class="opt" style="cursor:default"><input type="radio" name="c${n}" class="qc" value="${i}" ${q&&q.correct===i?'checked':''}><input type="text" class="qo" placeholder="Option ${'ABCD'[i]}" value="${esc(o[i]||'')}"></div>`).join('')+`<button class="btn sm ghost" type="button" data-rq style="margin-top:8px">Remove question</button></div>`}
+function fillLs(){const v=$('tLs').value;$('tLs').innerHTML=lessons.map(l=>`<option value="${l.id}">${esc(l.title)}</option>`).join('');
+  if(v&&lessons.some(l=>l.id===v))$('tLs').value=v;else if(lessons.length&&!v)loadTest()}
+async function loadTest(){const id=$('tLs').value;$('qb').innerHTML='';const L=lessons.find(x=>x.id===id);$('hwT').value=(L&&L.homework_task)||'';if(!id)return;
+  const {data:qs}=await sb.from('questions').select('*').eq('lesson_id',id).order('position');
+  if(!qs||!qs.length)return;
+  const {data:ks}=await sb.from('question_keys').select('*').in('question_id',qs.map(q=>q.id));
+  const km={};(ks||[]).forEach(k=>km[k.question_id]=k.correct);
+  $('qb').innerHTML=qs.map(q=>qBlock({...q,correct:km[q.id]})).join('')}
+$('tLs').onchange=loadTest;
+$('addQ').onclick=()=>$('qb').insertAdjacentHTML('beforeend',qBlock());
+$('qb').addEventListener('click',e=>{if(e.target.dataset.rq!==undefined)e.target.closest('.qcard').remove()});
+$('saveT').onclick=async()=>{const m=$('tM'),id=$('tLs').value;m.className='err';
+  if(!id){m.textContent='Add a lesson first.';return}
+  const items=[];
+  for(const b of document.querySelectorAll('#qb .qcard')){
+    const question=b.querySelector('.qq').value.trim(),opts=[...b.querySelectorAll('.qo')].map(x=>x.value.trim()),c=b.querySelector('.qc:checked');
+    if(!question){m.textContent='Every question needs text.';return}
+    if(opts.filter(Boolean).length<2){m.textContent='Each question needs at least 2 options.';return}
+    if(!c||!opts[+c.value]){m.textContent='Tick the correct answer for every question.';return}
+    const options=[],map={};opts.forEach((o,i)=>{if(o){map[i]=options.length;options.push(o)}});
+    items.push({question,options,correct:map[+c.value]})}
+  $('saveT').disabled=true;m.className='ok';m.textContent='Saving…';
+  let r=await sb.from('questions').delete().eq('lesson_id',id);
+  if(!r.error&&items.length){
+    r=await sb.from('questions').insert(items.map((x,i)=>({lesson_id:id,position:i,question:x.question,options:x.options}))).select();
+    if(!r.error)r=await sb.from('question_keys').insert(r.data.map(q=>({question_id:q.id,correct:items[q.position].correct})))}
+  $('saveT').disabled=false;
+  if(r.error){m.className='err';m.textContent='Failed: '+r.error.message;return}
+  m.textContent=items.length?'Test saved!':'Test removed.'};
+/* ---- admin: homework task + checking ---- */
+$('saveHw').onclick=async()=>{const id=$('tLs').value,m=$('hwM');m.className='err';if(!id){m.textContent='Add a lesson first.';return}
+  const t=$('hwT').value.trim()||null;const {error}=await sb.from('lessons').update({homework_task:t}).eq('id',id);
+  if(error){m.textContent='Failed: '+error.message;return}
+  const L=lessons.find(x=>x.id===id);if(L)L.homework_task=t;m.className='ok';m.textContent='Homework task saved!'};
+async function loadHw(){
+  const {data}=await sb.from('homework').select('*,profiles(full_name,username),lessons(title)').order('created_at',{ascending:false}).limit(50);
+  const rows=data||[],paths=rows.filter(r=>r.file_path).map(r=>r.file_path),um={};
+  if(paths.length){const {data:u}=await sb.storage.from('homework').createSignedUrls(paths,7200);(u||[]).forEach(x=>um[x.path]=x.signedUrl)}
+  const {data:xd}=await sb.from('xp_log').select('student_id,lesson_id,points').eq('reason','homework');const xm={};(xd||[]).forEach(x=>xm[x.student_id+'|'+x.lesson_id]=x.points);
+  rows.sort((a,b)=>(a.status==='submitted'?0:1)-(b.status==='submitted'?0:1));
+  $('nH').textContent=rows.filter(r=>r.status==='submitted').length;
+  $('hwList').innerHTML=rows.length?rows.map(r=>`<div class="qcard" data-h="${r.id}"><b>${esc(r.profiles&&r.profiles.full_name)}</b> <small style="color:var(--mute)">· ${esc(r.lessons&&r.lessons.title)} · ${new Date(r.created_at).toLocaleString()}</small> <span class="tag" style="margin:0 0 0 8px">${r.status==='checked'?'Checked':'Waiting'}</span>`
+    +(r.answer?`<p style="white-space:pre-wrap;margin:8px 0">${esc(r.answer)}</p>`:'')
+    +(r.file_path?`<p style="margin:6px 0"><a href="${esc(um[r.file_path]||'#')}" target="_blank" rel="noopener" style="color:var(--acc)">📎 Open attached file</a></p>`:'')
+    +`<div class="two"><div><label>Grade</label><input type="text" class="hg" value="${esc(r.grade)}" placeholder="e.g. 8/10"></div><div><label>XP (0–70)</label><input type="number" class="hx" min="0" max="70" value="${xm[r.student_id+'|'+r.lesson_id]??70}"></div></div><label>Feedback</label><textarea class="hf" placeholder="Write feedback for the student">${esc(r.feedback)}</textarea><button class="btn sm" data-ck="${r.id}" style="margin-top:10px">${r.status==='checked'?'Update':'Mark as checked'}</button></div>`).join(''):'<div class="empty">No homework yet.</div>'}
+$('hwList').addEventListener('click',async e=>{const id=e.target.dataset&&e.target.dataset.ck;if(!id)return;const c=e.target.closest('.qcard');e.target.disabled=true;
+  const xp=Math.min(70,Math.max(0,parseInt(c.querySelector('.hx').value,10)||0));
+  const {error}=await sb.rpc('check_homework',{p_id:id,p_grade:c.querySelector('.hg').value.trim()||null,p_feedback:c.querySelector('.hf').value.trim()||null,p_xp:xp});
+  if(error){alert(error.message);e.target.disabled=false;return}await loadHw()});
+/* ---- student: homework status + back ---- */
+async function loadMyHw(){myHw={};if(!me||me.role!=='student')return;
+  const {data}=await sb.from('homework').select('lesson_id,status,grade,created_at').eq('student_id',me.id).order('created_at',{ascending:false});
+  (data||[]).forEach(h=>{if(!myHw[h.lesson_id])myHw[h.lesson_id]=h})}
+$('hwBack').onclick=async()=>{await loadMyHw();render();show('vL')};
+/* ---- student: send homework ---- */
+async function openHw(l){const box=$('hwBox');box.innerHTML='';
+  if(me.role==='admin'){box.innerHTML=`<h2 style="margin:6px 6px 0">Homework: ${esc(l.title)}</h2><p style="margin:4px 6px 0;color:var(--mute);white-space:pre-wrap">${esc(l.homework_task||'No homework task written yet.')}</p><p style="margin:16px 6px 6px;color:var(--mute)">👀 This is what students see. You check their answers in <b>Admin → Homework to check</b>.</p>`;return}
+  const {data:old}=await sb.from('homework').select('*').eq('lesson_id',l.id).order('created_at',{ascending:false});
+  const mine=(old||[]).filter(h=>h.student_id===me.id);
+  box.innerHTML=`<h2 style="margin:6px 6px 0">Homework: ${esc(l.title)}</h2><p style="margin:4px 6px 0;color:var(--mute);white-space:pre-wrap">${esc(l.homework_task||'Write your answer below or attach a file.')}</p><span class="tag" style="margin:10px 6px 0">⭐ Up to 70 XP</span>
+  <div style="padding:6px"><label>Your answer</label><textarea id="hwA" placeholder="Type your homework here…"></textarea><label>Attach a file (optional, up to 20 MB)</label><div class="drop"><input type="file" id="hwF"></div><button class="btn" id="hwS">Send homework</button><div id="hwR" style="margin-top:8px"></div></div>`
+  +(mine.length?`<h3 style="margin:14px 6px 0">Your sent homework</h3>`+mine.map(h=>`<div class="qcard" style="margin:10px 6px;${h.status==='checked'?'border-color:#2e9e5b;background:color-mix(in srgb,#2e9e5b 10%,transparent)':''}"><span class="tag" style="margin:0">${h.status==='checked'?'Checked'+(h.grade?' · '+esc(h.grade):''):'Waiting for check'}</span> <small style="color:var(--mute)">${new Date(h.created_at).toLocaleString()}</small>${h.answer?`<p style="white-space:pre-wrap;margin:8px 0 0">${esc(h.answer)}</p>`:''}${h.feedback?`<p style="margin:8px 0 0"><b>Teacher:</b> ${esc(h.feedback)}</p>`:''}</div>`).join(''):'');
+  box.classList.remove('hide');
+  $('hwS').onclick=async()=>{const a=$('hwA').value.trim(),f=$('hwF').files[0],r=$('hwR');r.className='err';
+    if(!a&&!f){r.textContent='Write your answer or attach a file.';return}
+    if(f&&f.size>20*1024*1024){r.textContent='The file is over 20 MB.';return}
+    $('hwS').disabled=true;r.className='ok';r.textContent='Sending…';
+    let path=null;
+    if(f){const ext=(f.name.split('.').pop()||'bin').toLowerCase().replace(/[^a-z0-9]/g,'')||'bin';path=me.id+'/'+crypto.randomUUID()+'.'+ext;
+      const up=await sb.storage.from('homework').upload(path,f,{contentType:f.type||'application/octet-stream'});
+      if(up.error){r.className='err';r.textContent='Upload failed: '+up.error.message;$('hwS').disabled=false;return}}
+    const {error}=await sb.from('homework').insert({lesson_id:l.id,answer:a||null,file_path:path});
+    if(error){r.className='err';r.textContent='Could not send: '+error.message;$('hwS').disabled=false;return}
+    await loadMyHw();render();await openHw(l);$('hwR').className='ok';$('hwR').textContent='Homework sent! Your teacher will check it.'}}
+/* ---- leaderboard ---- */
+let lb=[],lbTab='all';
+async function loadLb(){const {data}=await sb.rpc('leaderboard');lb=data||[];renderLb()}
+$('tB').onclick=async()=>{show('vB');await loadLb()};
+$('lbTabs').addEventListener('click',e=>{const t=e.target.dataset&&e.target.dataset.t;if(!t)return;lbTab=t;
+  document.querySelectorAll('#lbTabs .chip').forEach(b=>b.classList.toggle('on',b.dataset.t===t));renderLb()});
+function renderLb(){
+  const medal=i=>['🥇','🥈','🥉'][i]||(i+1),isS=me.role==='student',myIdx=lb.findIndex(r=>r.id===me.id);
+  $('lbMe').textContent=isS&&myIdx>=0?`You have ${lb[myIdx].xp} XP · rank #${myIdx+1} of ${lb.length}`+(me.group_name?` · ${me.group_name}`:''):'Students ranked by XP.';
+  let html='';
+  if(lbTab==='groups'){
+    const g={};lb.forEach(r=>{const k=r.group_name||'No group';g[k]=g[k]||{n:0,xp:0};g[k].n++;g[k].xp+=Number(r.xp)});
+    const arr=Object.entries(g).sort((a,b)=>b[1].xp-a[1].xp);
+    html=arr.length?arr.map(([k,v],i)=>`<div class="topic lbrow ${isS&&k===me.group_name?'me':''}"><span class="tn">${medal(i)}</span><div><h3>${esc(k)}</h3><p>${v.n} student${v.n===1?'':'s'}</p></div><span class="xp">${v.xp} XP</span></div>`).join(''):'<div class="empty">No groups yet.</div>';
+  }else{
+    let list=lb;
+    if(lbTab==='grp'){if(!me.group_name){$('lbList').innerHTML='<div class="empty">You are not in a group yet. Ask your teacher.</div>';return}list=lb.filter(r=>r.group_name===me.group_name)}
+    html=list.length?list.map((r,i)=>`<div class="topic lbrow ${r.id===me.id?'me':''}"><span class="tn">${medal(i)}</span><div><h3>${esc(r.full_name)}</h3><p>${esc(r.group_name||'No group')} · ${esc(r.level)}</p></div><span class="xp">${r.xp} XP</span></div>`).join(''):'<div class="empty">No students yet.</div>';
+  }
+  $('lbList').innerHTML=html}
+/* ---- lesson flow: watch -> start test -> homework ---- */
+function openL(l){$('pv').src=l.url;$('pt').textContent=l.title;$('pd').textContent=l.description||'';$('pl').textContent=l.level;show('vP');openLesson(l)}
+const vDone=l=>isWatched(l),tDone=l=>!hasTest[l.id]||!!tested[l.id];
+async function loadProgress(){tested={};hasTest={};if(!me||me.role!=='student')return;
+  const [r,q]=await Promise.all([sb.from('results').select('lesson_id').eq('student_id',me.id),sb.from('questions').select('lesson_id')]);
+  (r.data||[]).forEach(x=>tested[x.lesson_id]=true);(q.data||[]).forEach(x=>hasTest[x.lesson_id]=true)}
+let maxT=0;
+const wkey=l=>'nt-watched:'+(me?me.id:'')+':'+l.id;
+function isWatched(l){try{return localStorage.getItem(wkey(l))==='1'}catch(e){return false}}
+function markWatched(l){try{localStorage.setItem(wkey(l),'1')}catch(e){}}
+function renderFlow(l,hasQ,done){const f=$('flow');
+  if(!done){f.innerHTML=`<button class="btn" disabled>🔒 Watch the whole video to unlock the ${hasQ?'test':'homework'}</button>`;return}
+  if(hasQ){f.innerHTML='<button class="btn" id="startT">▶ Start test</button>';
+    $('startT').onclick=()=>{$('testBox').classList.remove('hide');f.innerHTML='';$('testBox').scrollIntoView({behavior:'smooth',block:'start'})}}
+  else{f.innerHTML='<button class="btn" id="goHw">📝 Go to homework</button>';$('goHw').onclick=()=>{show('vH');openHw(l)}}}
+async function openLesson(l){
+  const v=$('pv'),adm=me.role==='admin';maxT=0;v.playbackRate=1;
+  $('testBox').classList.add('hide');$('testBox').innerHTML='';$('flow').innerHTML='';
+  const hasQ=await prepTest(l);
+  renderFlow(l,hasQ,adm||isWatched(l));
+  // students: no speeding up, no skipping ahead until the video has been watched once
+  v.onratechange=()=>{if(!adm&&v.playbackRate!==1)v.playbackRate=1};
+  v.onseeking=()=>{if(!adm&&!isWatched(l)&&v.currentTime>maxT+1.5)v.currentTime=maxT};
+  v.ontimeupdate=()=>{if(v.currentTime>maxT&&v.currentTime<maxT+2)maxT=v.currentTime};
+  v.onended=()=>{if(!adm)markWatched(l);renderFlow(l,hasQ,true)}}
+/* ---- student: take the test ---- */
+async function prepTest(l){const box=$('testBox');box.classList.add('hide');box.innerHTML='';
+  const {data:qs}=await sb.from('questions').select('*').eq('lesson_id',l.id).order('position');
+  if(!qs||!qs.length)return false;
+  box.innerHTML=`<h2 style="margin:6px 6px 0">Test: ${esc(l.title)}</h2><p style="margin:4px 6px 0;color:var(--mute)">Answer every question, then press Submit. Perfect score = 30 XP, each mistake = −3 XP.</p>`+qs.map((q,i)=>`<div class="qcard" data-q="${q.id}"><b>${i+1}. ${esc(q.question)}</b>`+q.options.map((o,j)=>`<label class="opt" data-j="${j}"><input type="radio" name="q${q.id}" value="${j}">${esc(o)}</label>`).join('')+`</div>`).join('')+`<button class="btn" id="subT" style="margin:6px;width:calc(100% - 12px)">Submit answers</button><div id="tRes" style="margin:6px"></div>`;
+  $('subT').onclick=async()=>{const ans={};let miss=false;
+    qs.forEach(q=>{const c=box.querySelector(`input[name="q${q.id}"]:checked`);if(c)ans[q.id]=+c.value;else miss=true});
+    if(miss){$('tRes').className='err';$('tRes').textContent='Please answer every question.';return}
+    $('subT').disabled=true;
+    const {data,error}=await sb.rpc('submit_test',{p_lesson:l.id,p_answers:ans});
+    $('subT').disabled=false;
+    if(error){$('tRes').className='err';$('tRes').textContent='Could not submit: '+error.message;return}
+    box.querySelectorAll('.qcard').forEach(c=>{const id=c.dataset.q,right=data.correct[id];c.querySelectorAll('.opt').forEach(o=>{const j=+o.dataset.j;o.classList.remove('good','bad');if(j===right)o.classList.add('good');else if(j===ans[id])o.classList.add('bad')})});
+    $('tRes').className='ok';$('tRes').style.fontSize='18px';$('tRes').innerHTML='Your score: '+data.score+' / '+data.total+'<br>⭐ +'+data.xp+' XP'+(data.best>data.xp?' (your best try: '+data.best+' XP)':'')+'<button class="btn" id="toHw" style="margin-top:14px">📝 Continue to homework →</button>';
+    tested[l.id]=true;$('toHw').onclick=()=>{show('vH');openHw(l)}};
+  return true}
+sb.auth.getSession().then(({data})=>{if(data.session)start()});
+</script>
+</body>
+</html>
