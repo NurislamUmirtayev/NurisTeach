@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>NurislamTeaches</title>
+<script>try{var t=localStorage.getItem('nt-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#faf5ec;--card:#fff;--ink:#241d18;--mute:#7b6f64;--acc:#c4552d;--acc2:#2f5d62;--line:#eadfcc;--sh:0 10px 34px rgba(70,45,20,.09);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -281,6 +282,25 @@ input[type=number]{width:100%;padding:12px 14px;border:1.5px solid var(--line);b
 #prog small{display:block;margin-top:8px;color:rgba(255,255,255,.92);font-weight:600;position:relative}
 #prog .pbar{position:relative}
 @media(max-width:760px){.lgroup .topic.hwsub{padding-left:20px}}
+/* ===== day / night mode + extra polish ===== */
+:root[data-theme="light"]{color-scheme:light}
+:root[data-theme="dark"]{color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark}}
+:root[data-theme="dark"] .lgroup.hw-done .hwsub h3{color:#6ee0a0}
+:root[data-theme="light"] .lgroup.hw-done .hwsub h3{color:#1f7a45}
+body,header,.box,.panel,.lgroup,.player,.topic,.pill,nav,.perks span{transition:background-color .35s ease,color .35s ease,border-color .35s ease,box-shadow .25s ease}
+input[type=text],input[type=password],input[type=number],textarea,select{transition:background-color .35s ease,color .35s ease,border-color .2s ease,box-shadow .2s ease}
+h1,h2,h3{letter-spacing:-.02em}
+.pill.icon{padding:9px 13px;font-size:18px;line-height:1}
+.ava{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font:700 14px Inter,sans-serif;color:#fff;background:linear-gradient(135deg,var(--acc),var(--acc2));box-shadow:0 6px 14px var(--glow);flex:none}
+@media(max-width:520px){.ava{display:none}}
+@keyframes gradmove{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+#vL .hero,#vB .hero{background-size:200% 200%;animation:rise .55s cubic-bezier(.2,.7,.2,1) both,gradmove 16s ease infinite}
+.cf{position:fixed;top:-16px;width:9px;height:14px;border-radius:2px;z-index:999;pointer-events:none;animation:cffall 3s ease-in forwards}
+@keyframes cffall{to{transform:translateY(108vh) rotate(720deg)}}
+:root[data-theme="dark"] header{box-shadow:0 10px 30px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.05)}
+:root[data-theme="dark"] .lgroup,:root[data-theme="dark"] .box,:root[data-theme="dark"] .panel,:root[data-theme="dark"] .player{box-shadow:0 14px 36px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.04)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lgroup,:root:not([data-theme="light"]) .box,:root:not([data-theme="light"]) .panel,:root:not([data-theme="light"]) .player{box-shadow:0 14px 36px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.04)}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 </head>
@@ -288,7 +308,7 @@ input[type=number]{width:100%;padding:12px 14px;border:1.5px solid var(--line);b
 <div class="blob b1"></div><div class="blob b2"></div>
 <header>
   <div class="logo"><b>N</b><div>Nurislam<span>Teaches</span></div></div>
-  <div class="right"><nav id="nav" class="hide"><button id="tL" class="on">Lessons</button><button id="tB">🏆 Leaderboard</button><button id="tA" class="hide">Admin</button></nav><button class="pill hide" id="out">Log out</button></div>
+  <div class="right"><button class="pill icon" id="themeBtn" type="button" aria-label="Switch day or night mode">🌙</button><nav id="nav" class="hide"><button id="tL" class="on">Lessons</button><button id="tB">🏆 Leaderboard</button><button id="tA" class="hide">Admin</button></nav><span class="ava hide" id="ava"></span><button class="pill hide" id="out">Log out</button></div>
 </header>
 
 <div id="login" class="login">
@@ -370,6 +390,10 @@ const SUPABASE_ANON_KEY='sb_publishable_Zz8iBHd7mwIwIs33WFsD8w_9biFTX2c';
 /* ============================================ */
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 const $=id=>document.getElementById(id);
+function curTheme(){return document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}
+function paintTheme(){$('themeBtn').textContent=curTheme()==='dark'?'☀️':'🌙'}
+$('themeBtn').onclick=()=>{const n=curTheme()==='dark'?'light':'dark';document.documentElement.dataset.theme=n;try{localStorage.setItem('nt-theme',n)}catch(e){}paintTheme()};
+paintTheme();
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const emailOf=u=>u.toLowerCase().trim()+'@nurislamteaches.app';
 let lessons=[],students=[],me=null,filter='All',mode='S',myHw={},xpMap={},tested={},hasTest={};
@@ -405,13 +429,13 @@ async function start(adminOnly){
 }
 async function enter(){
   $('login').classList.add('hide');$('app').classList.remove('hide');$('nav').classList.remove('hide');$('out').classList.remove('hide');
-  $('tA').classList.toggle('hide',me.role!=='admin');$('who').textContent=me.full_name.split(' ')[0];document.querySelector('#lbTabs [data-t="grp"]').classList.toggle('hide',me.role==='admin');
+  $('tA').classList.toggle('hide',me.role!=='admin');$('who').textContent=me.full_name.split(' ')[0];$('ava').textContent=me.full_name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();$('ava').classList.remove('hide');document.querySelector('#lbTabs [data-t="grp"]').classList.toggle('hide',me.role==='admin');
   document.querySelector('.hero p').textContent=me.role==='student'?'Your level: '+me.level+'. You can open your level and the levels below it. Open a topic to watch the video and do the test, then its Homework.':'Pick a topic to watch the video and do the test.';
   filter=me.role==='student'?me.level:'All';
   await loadLessons();await loadMyHw();await loadProgress();if(me.role==='admin'){await loadStudents();loadHw()}
   show(me.role==='admin'?'vA':'vL');render();
 }
-$('out').onclick=async()=>{await sb.auth.signOut();me=null;$('lp').value='';['app','nav','out'].forEach(x=>$(x).classList.add('hide'));$('login').classList.remove('hide');$('pv').pause()};
+$('out').onclick=async()=>{await sb.auth.signOut();me=null;$('lp').value='';['app','nav','out','ava'].forEach(x=>$(x).classList.add('hide'));$('login').classList.remove('hide');$('pv').pause()};
 
 async function loadLessons(){
   const {data}=await sb.from('lessons').select('*').order('created_at');
@@ -448,7 +472,7 @@ function render(){
   document.querySelectorAll('[data-dl]').forEach(b=>b.onclick=async()=>{const l=lessons.find(x=>x.id===b.dataset.dl);if(!confirm('Delete "'+l.title+'"?'))return;
     await sb.storage.from('videos').remove([l.video_path]);const {error}=await sb.from('lessons').delete().eq('id',l.id);
     if(error)return alert(error.message);await loadLessons();render()});
-  $('sList').innerHTML=students.length?students.map(s=>`<div class="row"><b>${esc(s.full_name)}<br><small>@${esc(s.username)} · ${xpMap[s.id]||0} XP ${s.active?'':'· disabled'}</small></b><select data-gp="${s.id}" style="width:auto;padding:7px 10px"><option value="">No group</option>${GROUPS.map(x=>`<option ${x===s.group_name?'selected':''}>${x}</option>`).join('')}</select><button class="btn sm" data-xp="${s.id}" type="button">± XP</button><select data-lv="${s.id}" style="width:auto;padding:7px 10px">${LEVELS.map(x=>`<option ${x===s.level?'selected':''}>${x}</option>`).join('')}</select><button class="btn sm ghost" data-ts="${s.id}">${s.active?'Disable':'Enable'}</button></div>`).join(''):'<div class="empty">No students yet.</div>';
+  $('sList').innerHTML=students.length?students.map(s=>`<div class="row"><b>${esc(s.full_name)}<br><small>@${esc(s.username)} · ${xpMap[s.id]||0} XP ${s.active?'':'· disabled'}</small></b><select data-gp="${s.id}" style="width:auto;padding:7px 10px"><option value="">No group</option>${GROUPS.map(x=>`<option ${x===s.group_name?'selected':''}>${x}</option>`).join('')}</select><button class="btn sm" data-xp="${s.id}" type="button">± XP</button><select data-lv="${s.id}" style="width:auto;padding:7px 10px">${LEVELS.map(x=>`<option ${x===s.level?'selected':''}>${x}</option>`).join('')}</select><button class="btn sm ghost" data-ts="${s.id}">${s.active?'Disable':'Enable'}</button><button class="btn sm ghost" data-del="${s.id}" type="button">🗑 Delete</button></div>`).join(''):'<div class="empty">No students yet.</div>';
   document.querySelectorAll('[data-ts]').forEach(b=>b.onclick=async()=>{const s=students.find(x=>x.id===b.dataset.ts);
     const {error}=await sb.from('profiles').update({active:!s.active}).eq('id',s.id);if(error)return alert(error.message);await loadStudents();render()});
 }
@@ -495,6 +519,21 @@ document.addEventListener('click',async e=>{const id=e.target.dataset&&e.target.
   const note=prompt('Reason (optional):');
   const {error}=await sb.rpc('admin_give_xp',{p_student:id,p_points:n,p_note:note||null});
   if(error)alert(error.message);else{await loadStudents();render()}});
+/* admin: delete a student for good */
+document.addEventListener('click',async e=>{const id=e.target.dataset&&e.target.dataset.del;if(!id)return;
+  const st=students.find(x=>x.id===id);if(!st)return;
+  if(!confirm('Delete '+st.full_name+' forever?\n\nTheir account, homework, test results and XP will be deleted too. This cannot be undone.'))return;
+  e.target.disabled=true;
+  const {data:hw}=await sb.from('homework').select('file_path').eq('student_id',id);
+  const paths=(hw||[]).map(h=>h.file_path).filter(Boolean);
+  if(paths.length)await sb.storage.from('homework').remove(paths);
+  const {error}=await sb.rpc('delete_student',{p_id:id});
+  if(error){alert(error.message);e.target.disabled=false;return}
+  await loadStudents();await loadHw();render()});
+/* ---- confetti for a perfect test ---- */
+function confetti(){const c=['#c4552d','#2f5d62','#f2b84b','#3cc274','#4a73c9','#d9774a'];
+  for(let i=0;i<70;i++){const d=document.createElement('i');d.className='cf';d.style.left=Math.random()*100+'vw';d.style.background=c[i%c.length];
+    d.style.animationDelay=Math.random()*.6+'s';d.style.animationDuration=(2+Math.random()*1.6)+'s';document.body.appendChild(d);setTimeout(()=>d.remove(),4200)}}
 /* ---- admin: test builder ---- */
 let qn=0;
 function qBlock(q){qn++;const n=qn,o=(q&&q.options)||[];
@@ -632,7 +671,7 @@ async function prepTest(l){const box=$('testBox');box.classList.add('hide');box.
     if(error){$('tRes').className='err';$('tRes').textContent='Could not submit: '+error.message;return}
     box.querySelectorAll('.qcard').forEach(c=>{const id=c.dataset.q,right=data.correct[id];c.querySelectorAll('.opt').forEach(o=>{const j=+o.dataset.j;o.classList.remove('good','bad');if(j===right)o.classList.add('good');else if(j===ans[id])o.classList.add('bad')})});
     $('tRes').className='ok';$('tRes').style.fontSize='18px';$('tRes').innerHTML='Your score: '+data.score+' / '+data.total+'<br>⭐ +'+data.xp+' XP'+(data.best>data.xp?' (your best try: '+data.best+' XP)':'')+'<button class="btn" id="toHw" style="margin-top:14px">📝 Continue to homework →</button>';
-    tested[l.id]=true;$('toHw').onclick=()=>{show('vH');openHw(l)}};
+    tested[l.id]=true;if(data.total>0&&data.score===data.total)confetti();$('toHw').onclick=()=>{show('vH');openHw(l)}};
   return true}
 sb.auth.getSession().then(({data})=>{if(data.session)start()});
 </script>
