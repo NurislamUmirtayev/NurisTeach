@@ -386,6 +386,21 @@ h1,h2,h3{letter-spacing:-.02em}
 :root[data-theme="cyber"] .perks span{border-radius:6px;background:rgba(14,8,32,.8);border-color:rgba(0,240,255,.4)}
 :root[data-theme="cyber"] .err{color:#ff4d6d}:root[data-theme="cyber"] .ok{color:#39ff88}
 :root[data-theme="cyber"] .foot{color:#7dd8e6;text-transform:uppercase;letter-spacing:.14em;font-size:11px}
+/* ===== profile page + pictures ===== */
+.ava{overflow:hidden;cursor:pointer;transition:transform .2s}.ava:hover{transform:scale(1.08)}
+.ava img{width:100%;height:100%;object-fit:cover;display:block}
+.av{width:44px;height:44px;border-radius:50%;object-fit:cover;flex:none;display:grid;place-items:center;font:700 14px Inter,sans-serif;color:#fff;background:linear-gradient(135deg,var(--acc),var(--acc2));box-shadow:0 6px 14px var(--glow)}
+.pf{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+.pfimg{width:132px;height:132px;border-radius:50%;object-fit:cover;display:grid;place-items:center;font:700 42px Fraunces,Georgia,serif;color:#fff;background:linear-gradient(135deg,var(--acc),var(--acc2));border:4px solid var(--card);box-shadow:0 0 0 3px var(--acc),0 16px 34px var(--glow)}
+.pfinfo{flex:1;min-width:220px}.pfinfo h2{font-size:30px}.pfinfo p{color:var(--mute);margin:4px 0 12px}
+.pfbtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+#vU .hero{position:relative;overflow:hidden;color:#fff;border-radius:30px;padding:30px 34px;margin:10px 0 22px;background:linear-gradient(120deg,#c4552d 0%,#d9774a 48%,#2f5d62 125%);box-shadow:0 20px 44px rgba(196,85,45,.28)}
+#vU .hero h1,#vU .hero p{color:#fff}#vU .hero h1 em{color:#ffe7d8}#vU .hero p{margin-top:10px;color:rgba(255,255,255,.9)}
+:root[data-theme="cyber"] #vU .hero{border-radius:12px;background:linear-gradient(120deg,#ff2bd6 0%,#7a2cff 50%,#00c8ff 100%);border:1px solid rgba(255,255,255,.35);box-shadow:0 0 40px rgba(255,43,214,.45)}
+:root[data-theme="cyber"] #vU .hero h1 em{color:#faff6a}
+:root[data-theme="cyber"] .pfimg{border-color:#0e0820;box-shadow:0 0 0 3px #ff2bd6,0 0 32px rgba(255,43,214,.65)}
+:root[data-theme="cyber"] .av{border-radius:8px;box-shadow:0 0 14px rgba(0,240,255,.55)}
+@media(max-width:760px){#vU .hero{padding:24px 20px;border-radius:24px}.pf{gap:18px}.pfimg{width:104px;height:104px;font-size:34px}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 </head>
@@ -393,7 +408,7 @@ h1,h2,h3{letter-spacing:-.02em}
 <div class="blob b1"></div><div class="blob b2"></div>
 <header>
   <div class="logo"><b>N</b><div>Nurislam<span>Teaches</span></div></div>
-  <div class="right"><div class="themes" role="group" aria-label="Theme"><button type="button" data-th="dark" title="Night mode">🌙</button><button type="button" data-th="cyber" title="Cyberpunk mode">⚡</button></div><nav id="nav" class="hide"><button id="tL" class="on">Lessons</button><button id="tB">🏆 Leaderboard</button><button id="tA" class="hide">Admin</button></nav><span class="ava hide" id="ava"></span><button class="pill hide" id="out">Log out</button></div>
+  <div class="right"><div class="themes" role="group" aria-label="Theme"><button type="button" data-th="dark" title="Night mode">🌙</button><button type="button" data-th="cyber" title="Cyberpunk mode">⚡</button></div><nav id="nav" class="hide"><button id="tL" class="on">Lessons</button><button id="tB">🏆 Leaderboard</button><button id="tP">👤 Profile</button><button id="tA" class="hide">Admin</button></nav><span class="ava hide" id="ava"></span><button class="pill hide" id="out">Log out</button></div>
 </header>
 
 <div id="login" class="login">
@@ -433,6 +448,18 @@ h1,h2,h3{letter-spacing:-.02em}
     <div id="lbTabs" class="levels"><button class="chip on" data-t="all">All students</button><button class="chip" data-t="grp">My group</button><button class="chip" data-t="groups">Groups</button></div>
     <div id="lbList" class="topics"></div>
     <div class="panel" style="margin-top:22px"><h3 style="margin-bottom:8px">How to earn XP</h3><p style="margin:0;color:var(--mute)">🎯 Test: all answers correct = <b>30 XP</b>, every mistake takes away 3 XP (your best try counts).<br>📝 Homework: up to <b>70 XP</b>, given by your teacher when they check it.<br>⭐ Your teacher can also give extra XP.</p></div>
+  </section>
+  <section id="vU" class="hide">
+    <div class="hero"><h1>My <em>profile</em></h1><p>Change your photo and see how you are doing.</p></div>
+    <div class="panel pf">
+      <div class="pfava" id="pfAva"></div>
+      <div class="pfinfo"><h2 id="pfName"></h2><p id="pfMeta"></p><div id="pfStats"></div>
+        <div class="pfbtns"><button class="btn sm" id="pfPick" type="button">📷 Change photo</button><button class="btn sm ghost hide" id="pfDel" type="button">Remove photo</button></div>
+        <input type="file" id="pfFile" accept="image/*" class="hide"><div id="pfMsg" style="margin-top:10px"></div></div>
+    </div>
+    <div class="panel"><h2>Change password</h2>
+      <div class="two"><div><label>New password</label><input type="password" id="pw1" autocomplete="new-password"></div><div><label>Repeat it</label><input type="password" id="pw2" autocomplete="new-password"></div></div>
+      <button class="btn" id="pwBtn" type="button">Save password</button><div id="pwMsg"></div></div>
   </section>
   <section id="vA" class="hide">
     <div class="stat"><div><i>🎬</i><b id="nL">0</b>lessons</div><div><i>🎓</i><b id="nS">0</b>students</div><div><i>📝</i><b id="nH">0</b>homework to check</div></div>
@@ -487,8 +514,8 @@ const MAXMB=500,LEVELS=['Beginner','Elementary','Pre-Intermediate','Intermediate
 const GROUPS=Array.from({length:31},(_,i)=>'Junior '+(i+1));
 $('sG').innerHTML='<option value="">No group</option>'+GROUPS.map(x=>`<option>${x}</option>`).join('');
 
-function show(v){['vL','vP','vH','vB','vA'].forEach(x=>$(x).classList.toggle('hide',x!==v));
-  $('tL').classList.toggle('on',v==='vL'||v==='vP'||v==='vH');$('tB').classList.toggle('on',v==='vB');$('tA').classList.toggle('on',v==='vA');
+function show(v){['vL','vP','vH','vB','vU','vA'].forEach(x=>$(x).classList.toggle('hide',x!==v));
+  $('tL').classList.toggle('on',v==='vL'||v==='vP'||v==='vH');$('tB').classList.toggle('on',v==='vB');$('tP').classList.toggle('on',v==='vU');$('tA').classList.toggle('on',v==='vA');
   if(v!=='vP'){$('pv').pause();$('testBox').classList.add('hide')}scrollTo(0,0)}
 $('tL').onclick=()=>{render();show('vL')};$('tA').onclick=()=>show('vA');$('back').onclick=()=>{render();show('vL')};
 ['lu','lp'].forEach(i=>$(i).addEventListener('keydown',e=>{if(e.key==='Enter')$('lb').click()}));
@@ -514,7 +541,7 @@ async function start(adminOnly){
 }
 async function enter(){
   $('login').classList.add('hide');$('app').classList.remove('hide');$('nav').classList.remove('hide');$('out').classList.remove('hide');
-  $('tA').classList.toggle('hide',me.role!=='admin');$('who').textContent=me.full_name.split(' ')[0];$('ava').textContent=me.full_name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();$('ava').classList.remove('hide');document.querySelector('#lbTabs [data-t="grp"]').classList.toggle('hide',me.role==='admin');
+  $('tA').classList.toggle('hide',me.role!=='admin');$('who').textContent=me.full_name.split(' ')[0];paintAva();$('ava').classList.remove('hide');document.querySelector('#lbTabs [data-t="grp"]').classList.toggle('hide',me.role==='admin');
   document.querySelector('.hero p').textContent=me.role==='student'?'Your level: '+me.level+'. You can open your level and the levels below it. Open a topic to watch the video and do the test, then its Homework.':'Pick a topic to watch the video and do the test.';
   filter=me.role==='student'?me.level:'All';
   await loadLessons();await loadMyHw();await loadProgress();if(me.role==='admin'){await loadStudents();loadHw()}
@@ -697,6 +724,40 @@ async function openHw(l){const box=$('hwBox');box.innerHTML='';
     const {error}=await sb.from('homework').insert({lesson_id:l.id,answer:a||null,file_path:path});
     if(error){r.className='err';r.textContent='Could not send: '+error.message;$('hwS').disabled=false;return}
     await loadMyHw();render();await openHw(l);$('hwR').className='ok';$('hwR').textContent='Homework sent! Your teacher will check it.'}}
+/* ---- profile + picture ---- */
+const avUrl=p=>p?sb.storage.from('avatars').getPublicUrl(p).data.publicUrl:'';
+const initials=n=>(n||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+function avHtml(name,path,cls){return path?`<img class="${cls}" src="${esc(avUrl(path))}" alt="">`:`<span class="${cls}">${esc(initials(name))}</span>`}
+function paintAva(){$('ava').innerHTML=me.avatar_path?`<img src="${esc(avUrl(me.avatar_path))}" alt="">`:esc(initials(me.full_name))}
+function paintProfile(){const idx=lb.findIndex(x=>x.id===me.id),r=lb[idx];
+  $('pfAva').innerHTML=avHtml(me.full_name,me.avatar_path,'pfimg');$('pfName').textContent=me.full_name;
+  $('pfMeta').textContent=me.role==='admin'?'Teacher · admin':[me.level,me.group_name].filter(Boolean).join(' · ');
+  $('pfStats').innerHTML=me.role==='student'&&r?`<span class="tag" style="margin:0 8px 0 0">⭐ ${r.xp} XP</span><span class="tag" style="margin:0">🏆 Rank #${idx+1} of ${lb.length}</span>`:'';
+  $('pfDel').classList.toggle('hide',!me.avatar_path)}
+async function openProfile(){show('vU');paintProfile();const {data}=await sb.rpc('leaderboard');lb=data||[];paintProfile()}
+$('tP').onclick=openProfile;$('ava').onclick=openProfile;
+function squareJpeg(file,size){return new Promise((res,rej)=>{const img=new Image(),u=URL.createObjectURL(file);
+  img.onload=()=>{const c=document.createElement('canvas');c.width=c.height=size;const x=c.getContext('2d'),m=Math.min(img.width,img.height);
+    x.drawImage(img,(img.width-m)/2,(img.height-m)/2,m,m,0,0,size,size);URL.revokeObjectURL(u);c.toBlob(b=>b?res(b):rej(new Error('Could not read the picture')),'image/jpeg',.88)};
+  img.onerror=()=>rej(new Error('Could not read the picture'));img.src=u})}
+$('pfPick').onclick=()=>$('pfFile').click();
+$('pfFile').onchange=async()=>{const f=$('pfFile').files[0];$('pfFile').value='';if(!f)return;const m=$('pfMsg');m.className='err';
+  if(!/^image\//.test(f.type)){m.textContent='Please choose a picture (JPG or PNG).';return}
+  m.className='ok';m.textContent='Uploading…';
+  try{const blob=await squareJpeg(f,320),path=me.id+'/'+Date.now()+'.jpg';
+    const up=await sb.storage.from('avatars').upload(path,blob,{contentType:'image/jpeg'});if(up.error)throw up.error;
+    const {error}=await sb.rpc('set_my_avatar',{p_path:path});if(error)throw error;
+    const old=me.avatar_path;me.avatar_path=path;if(old)sb.storage.from('avatars').remove([old]);
+    paintAva();paintProfile();m.textContent='Photo updated! ✨'}
+  catch(e){m.className='err';m.textContent='Could not upload: '+(e.message||e)}};
+$('pfDel').onclick=async()=>{const m=$('pfMsg'),old=me.avatar_path;if(!old||!confirm('Remove your profile photo?'))return;
+  const {error}=await sb.rpc('set_my_avatar',{p_path:null});if(error){m.className='err';m.textContent=error.message;return}
+  sb.storage.from('avatars').remove([old]);me.avatar_path=null;paintAva();paintProfile();m.className='ok';m.textContent='Photo removed.'};
+$('pwBtn').onclick=async()=>{const p=$('pw1').value,m=$('pwMsg');m.className='err';
+  if(p.length<6){m.textContent='Use at least 6 characters.';return}
+  if(p!==$('pw2').value){m.textContent='The two passwords are different.';return}
+  const {error}=await sb.auth.updateUser({password:p});if(error){m.textContent=error.message;return}
+  $('pw1').value=$('pw2').value='';m.className='ok';m.textContent='Password changed ✅'};
 /* ---- leaderboard ---- */
 let lb=[],lbTab='all';
 async function loadLb(){const {data}=await sb.rpc('leaderboard');lb=data||[];renderLb()}
@@ -714,7 +775,7 @@ function renderLb(){
   }else{
     let list=lb;
     if(lbTab==='grp'){if(!me.group_name){$('lbList').innerHTML='<div class="empty">You are not in a group yet. Ask your teacher.</div>';return}list=lb.filter(r=>r.group_name===me.group_name)}
-    html=list.length?list.map((r,i)=>`<div class="topic lbrow ${r.id===me.id?'me':''}"><span class="tn">${medal(i)}</span><div><h3>${esc(r.full_name)}</h3><p>${esc(r.group_name||'No group')} · ${esc(r.level)}</p></div><span class="xp">${r.xp} XP</span></div>`).join(''):'<div class="empty">No students yet.</div>';
+    html=list.length?list.map((r,i)=>`<div class="topic lbrow ${r.id===me.id?'me':''}"><span class="tn">${medal(i)}</span>${avHtml(r.full_name,r.avatar_path,'av')}<div><h3>${esc(r.full_name)}</h3><p>${esc(r.group_name||'No group')} · ${esc(r.level)}</p></div><span class="xp">${r.xp} XP</span></div>`).join(''):'<div class="empty">No students yet.</div>';
   }
   $('lbList').innerHTML=html}
 /* ---- lesson flow: watch -> start test -> homework ---- */
