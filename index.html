@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>NurislamTeaches</title>
-<script>try{var t=localStorage.getItem('nt-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('nt-theme');document.documentElement.dataset.theme=t==='cyber'?'cyber':'dark'}catch(e){}</script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#faf5ec;--card:#fff;--ink:#241d18;--mute:#7b6f64;--acc:#c4552d;--acc2:#2f5d62;--line:#eadfcc;--sh:0 10px 34px rgba(70,45,20,.09);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171310;--card:#241e19;--ink:#f4ece1;--mute:#a99c8d;--acc:#ec845d;--acc2:#82b9bd;--line:#3a3128;--sh:0 10px 34px rgba(0,0,0,.45)}}
@@ -301,6 +301,91 @@ h1,h2,h3{letter-spacing:-.02em}
 :root[data-theme="dark"] header{box-shadow:0 10px 30px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.05)}
 :root[data-theme="dark"] .lgroup,:root[data-theme="dark"] .box,:root[data-theme="dark"] .panel,:root[data-theme="dark"] .player{box-shadow:0 14px 36px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.04)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lgroup,:root:not([data-theme="light"]) .box,:root:not([data-theme="light"]) .panel,:root:not([data-theme="light"]) .player{box-shadow:0 14px 36px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.04)}}
+
+/* ===== theme switch ===== */
+.themes{display:flex;gap:2px;padding:4px;border-radius:99px;background:var(--card);border:1.5px solid var(--line);box-shadow:0 4px 14px rgba(60,40,20,.06)}
+.themes button{border:0;background:none;cursor:pointer;font-size:16px;line-height:1;padding:8px 10px;border-radius:99px;opacity:.55;transition:opacity .2s,background .2s,transform .2s}
+.themes button:hover{opacity:1;transform:translateY(-1px)}
+.themes button.on{opacity:1;background:color-mix(in srgb,var(--acc) 18%,transparent);box-shadow:inset 0 0 0 1.5px var(--acc)}
+@media(max-width:520px){.right{flex-wrap:wrap}}
+
+/* ===================== CYBERPUNK MODE ===================== */
+:root[data-theme="cyber"]{--bg:#06030f;--card:#0e0820;--ink:#e8f6ff;--mute:#8d9fc9;--acc:#ff2bd6;--acc2:#00f0ff;--line:#2d1b55;--sh:0 0 0 1px rgba(0,240,255,.14),0 0 30px rgba(255,43,214,.14);--glow:rgba(255,43,214,.55);--danger:#ff4d6d;color-scheme:dark}
+:root[data-theme="cyber"] body{font-family:Rajdhani,Inter,system-ui,sans-serif;font-size:17px;font-weight:500}
+:root[data-theme="cyber"] h1,:root[data-theme="cyber"] h2,:root[data-theme="cyber"] h3,:root[data-theme="cyber"] .logo,:root[data-theme="cyber"] .xp,:root[data-theme="cyber"] .tn,:root[data-theme="cyber"] .stat b{font-family:Orbitron,Rajdhani,sans-serif}
+:root[data-theme="cyber"] h1,:root[data-theme="cyber"] h2{text-transform:uppercase;letter-spacing:.04em}
+:root[data-theme="cyber"] h3{font-size:17px;letter-spacing:.02em}
+:root[data-theme="cyber"] .login h1{font-size:clamp(32px,6vw,56px)}
+:root[data-theme="cyber"] .hero h1{font-size:clamp(26px,4.6vw,42px)}
+:root[data-theme="cyber"]::selection,:root[data-theme="cyber"] ::selection{background:#ff2bd6;color:#fff}
+/* neon grid + scanlines + glow blobs */
+:root[data-theme="cyber"] body::before{background:radial-gradient(800px 520px at 92% -8%,rgba(255,43,214,.3),transparent),radial-gradient(700px 520px at -8% 45%,rgba(0,240,255,.2),transparent),radial-gradient(600px 400px at 50% 115%,rgba(122,44,255,.28),transparent)}
+:root[data-theme="cyber"] body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(rgba(0,240,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(0,240,255,.08) 1px,transparent 1px);background-size:46px 46px;-webkit-mask-image:linear-gradient(to bottom,transparent,#000 35%,#000 70%,transparent);mask-image:linear-gradient(to bottom,transparent,#000 35%,#000 70%,transparent)}
+:root[data-theme="cyber"]::after{content:"";position:fixed;inset:0;z-index:997;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0,rgba(0,0,0,.22) 1px,transparent 1px,transparent 3px);opacity:.4}
+:root[data-theme="cyber"] .blob{opacity:.3}
+/* glitch title */
+@keyframes glitch{0%,90%,100%{text-shadow:2px 0 #ff2bd6,-2px 0 #00f0ff;transform:none}92%{text-shadow:-5px 0 #ff2bd6,5px 0 #00f0ff;transform:translateX(3px)}94%{text-shadow:5px 0 #ff2bd6,-5px 0 #00f0ff;transform:translateX(-3px)}96%{text-shadow:2px 0 #ff2bd6,-2px 0 #00f0ff;transform:translateX(1px)}}
+:root[data-theme="cyber"] .login h1,:root[data-theme="cyber"] #vL .hero h1,:root[data-theme="cyber"] #vB .hero h1{animation:glitch 6s infinite;text-shadow:2px 0 #ff2bd6,-2px 0 #00f0ff}
+:root[data-theme="cyber"] .login h1 em,:root[data-theme="cyber"] .hero h1 em{text-shadow:none;color:#00f0ff;background:none;-webkit-text-fill-color:currentColor}
+:root[data-theme="cyber"] .login h1 em{background:linear-gradient(90deg,#ff2bd6,#00f0ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+/* panels */
+:root[data-theme="cyber"] header{border-color:rgba(0,240,255,.45);background:color-mix(in srgb,#0e0820 78%,transparent);box-shadow:0 0 0 1px rgba(255,43,214,.25),0 10px 34px rgba(255,43,214,.2)}
+:root[data-theme="cyber"] .logo{text-shadow:0 0 12px rgba(255,43,214,.7)}
+:root[data-theme="cyber"] .logo span{color:#00f0ff;text-shadow:0 0 12px rgba(0,240,255,.8)}
+:root[data-theme="cyber"] .logo b{box-shadow:0 0 18px #ff2bd6;border-radius:8px}
+:root[data-theme="cyber"] .lgroup,:root[data-theme="cyber"] .box,:root[data-theme="cyber"] .panel,:root[data-theme="cyber"] .player,:root[data-theme="cyber"] .topic.lbrow,:root[data-theme="cyber"] .stat div,:root[data-theme="cyber"] .qcard{border:1px solid rgba(0,240,255,.4);border-radius:10px;background:linear-gradient(180deg,rgba(18,10,40,.92),rgba(10,6,26,.92));box-shadow:0 0 0 1px rgba(255,43,214,.12),0 0 26px rgba(255,43,214,.16)}
+:root[data-theme="cyber"] .box::before,:root[data-theme="cyber"] .panel::before{height:3px;background:linear-gradient(90deg,#ff2bd6,#7a2cff,#00f0ff);box-shadow:0 0 14px #ff2bd6}
+:root[data-theme="cyber"] .lgroup:hover{border-color:#ff2bd6;box-shadow:0 0 0 1px #ff2bd6,0 0 34px rgba(255,43,214,.35)}
+:root[data-theme="cyber"] .lgroup .topic{background:transparent}
+:root[data-theme="cyber"] .lgroup .topic:hover{background:rgba(255,43,214,.08)}
+:root[data-theme="cyber"] .lgroup .topic.hwsub{background:rgba(0,240,255,.05);border-top:1px dashed rgba(0,240,255,.45)}
+:root[data-theme="cyber"] .lgroup .topic.hwsub:hover{background:rgba(0,240,255,.12)}
+:root[data-theme="cyber"] .topic::before{background:linear-gradient(#ff2bd6,#00f0ff)}
+:root[data-theme="cyber"] .tn{border-radius:8px;box-shadow:0 0 16px rgba(255,43,214,.6);background:linear-gradient(135deg,#ff2bd6,#7a2cff)}
+:root[data-theme="cyber"] .lgroup .topic.hwsub .tn{background:linear-gradient(135deg,#00f0ff,#2b7bff);color:#02111a}
+:root[data-theme="cyber"] #vL .hero,:root[data-theme="cyber"] #vB .hero{border-radius:12px;background:linear-gradient(120deg,#ff2bd6 0%,#7a2cff 50%,#00c8ff 100%);background-size:200% 200%;border:1px solid rgba(255,255,255,.35);box-shadow:0 0 40px rgba(255,43,214,.45),inset 0 0 30px rgba(255,255,255,.08)}
+:root[data-theme="cyber"] #vL .hero h1 em,:root[data-theme="cyber"] #vB .hero h1 em{color:#faff6a}
+/* buttons */
+:root[data-theme="cyber"] .btn{font-family:Orbitron,Rajdhani,sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:.09em;border:1px solid rgba(255,255,255,.4);border-radius:8px;background:linear-gradient(135deg,#ff2bd6,#8a2bff);box-shadow:0 0 20px rgba(255,43,214,.6),inset 0 0 12px rgba(255,255,255,.18)}
+:root[data-theme="cyber"] .btn:hover:not(:disabled){box-shadow:0 0 34px #ff2bd6,inset 0 0 14px rgba(255,255,255,.3)}
+:root[data-theme="cyber"] .btn.sm{border-radius:6px;font-size:11px;padding:9px 14px}
+:root[data-theme="cyber"] .btn[style*="--acc2"]{background:linear-gradient(135deg,#00f0ff,#2b7bff)!important;color:#02111a;box-shadow:0 0 20px rgba(0,240,255,.55)!important}
+:root[data-theme="cyber"] .btn.ghost{background:transparent!important;color:#ff4d6d;border:1px solid #ff4d6d;box-shadow:0 0 12px rgba(255,77,109,.35)!important}
+:root[data-theme="cyber"] .btn.ghost:hover:not(:disabled){background:rgba(255,77,109,.15)!important;box-shadow:0 0 22px rgba(255,77,109,.6)!important}
+:root[data-theme="cyber"] input[type=file]::file-selector-button{background:linear-gradient(135deg,#00f0ff,#2b7bff);color:#02111a;border-radius:6px;box-shadow:0 0 14px rgba(0,240,255,.5)}
+:root[data-theme="cyber"] .chip{font-family:Orbitron,Rajdhani,sans-serif;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;background:rgba(14,8,32,.8);border:1px solid rgba(0,240,255,.4);border-radius:6px;color:#8dd9e6}
+:root[data-theme="cyber"] .chip.on{background:linear-gradient(135deg,#ff2bd6,#8a2bff);color:#fff;border-color:#fff3;box-shadow:0 0 20px rgba(255,43,214,.65)}
+:root[data-theme="cyber"] .chip.locked{border-style:dashed;opacity:.45;box-shadow:none}
+:root[data-theme="cyber"] nav,:root[data-theme="cyber"] .pill,:root[data-theme="cyber"] .themes,:root[data-theme="cyber"] .back,:root[data-theme="cyber"] .tabs{background:rgba(14,8,32,.85);border:1px solid rgba(0,240,255,.4);border-radius:10px}
+:root[data-theme="cyber"] nav button,:root[data-theme="cyber"] .pill,:root[data-theme="cyber"] .back,:root[data-theme="cyber"] .tabs button{font-family:Orbitron,Rajdhani,sans-serif;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;border-radius:7px}
+:root[data-theme="cyber"] nav button.on{background:linear-gradient(135deg,#ff2bd6,#8a2bff);color:#fff;box-shadow:0 0 16px rgba(255,43,214,.6)}
+:root[data-theme="cyber"] .tabs button.on{background:rgba(255,43,214,.2);color:#ff7de9;box-shadow:inset 0 0 0 1px #ff2bd6}
+:root[data-theme="cyber"] .themes button.on{background:rgba(255,43,214,.22);box-shadow:inset 0 0 0 1px #ff2bd6,0 0 12px rgba(255,43,214,.5)}
+:root[data-theme="cyber"] .pill:hover,:root[data-theme="cyber"] .back:hover{border-color:#ff2bd6;color:#ff7de9}
+:root[data-theme="cyber"] .ava{border-radius:8px;box-shadow:0 0 16px rgba(0,240,255,.6)}
+/* inputs */
+:root[data-theme="cyber"] input[type=text],:root[data-theme="cyber"] input[type=password],:root[data-theme="cyber"] input[type=number],:root[data-theme="cyber"] textarea,:root[data-theme="cyber"] select{background:rgba(4,2,14,.85);border:1px solid rgba(0,240,255,.4);border-radius:8px;color:#e8f6ff}
+:root[data-theme="cyber"] input:focus,:root[data-theme="cyber"] textarea:focus,:root[data-theme="cyber"] select:focus{border-color:#ff2bd6;box-shadow:0 0 0 3px rgba(255,43,214,.25),0 0 18px rgba(255,43,214,.45)}
+:root[data-theme="cyber"] label{color:#7dd8e6;text-transform:uppercase;letter-spacing:.08em;font-size:12px}
+/* tags, steps, status colours */
+:root[data-theme="cyber"] .tag{border-radius:5px;font-family:Orbitron,Rajdhani,sans-serif;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;border:1px solid currentColor}
+:root[data-theme="cyber"] .tag[data-l="0"]{--lc:#39ff88}:root[data-theme="cyber"] .tag[data-l="1"]{--lc:#00f0ff}:root[data-theme="cyber"] .tag[data-l="2"]{--lc:#5b9bff}:root[data-theme="cyber"] .tag[data-l="3"]{--lc:#c06bff}:root[data-theme="cyber"] .tag[data-l="4"]{--lc:#ff2bd6}
+:root[data-theme="cyber"] .steps span{border-radius:5px;background:rgba(0,240,255,.06);border:1px solid rgba(0,240,255,.35);color:#8dd9e6}
+:root[data-theme="cyber"] .steps span.ok{background:#39ff88;border-color:#39ff88;color:#02150a;box-shadow:0 0 12px rgba(57,255,136,.6)}
+:root[data-theme="cyber"] .lgroup.hw-done{border:1.5px solid #39ff88;box-shadow:0 0 0 1px rgba(57,255,136,.3),0 0 34px rgba(57,255,136,.35)}
+:root[data-theme="cyber"] .lgroup.hw-done .hwsub{background:rgba(57,255,136,.1);border-top-color:#39ff88}
+:root[data-theme="cyber"] .lgroup.hw-done .hwsub .tn{background:linear-gradient(135deg,#39ff88,#00c46a)!important;color:#02150a;box-shadow:0 0 16px rgba(57,255,136,.7)}
+:root[data-theme="cyber"] .lgroup.hw-done .hwsub h3{color:#39ff88;text-shadow:0 0 10px rgba(57,255,136,.6)}
+:root[data-theme="cyber"] .lgroup.hw-done .hwsub .tag{background:#39ff88;color:#02150a;border-color:#39ff88}
+:root[data-theme="cyber"] .lgroup.hw-wait .hwsub .tag{color:#ffd23f;background:rgba(255,210,63,.14)}
+:root[data-theme="cyber"] .opt.good{background:rgba(57,255,136,.18);border-color:#39ff88}
+:root[data-theme="cyber"] .opt.bad{background:rgba(255,77,109,.18);border-color:#ff4d6d}
+:root[data-theme="cyber"] .lbrow.me{border-color:#ff2bd6;box-shadow:0 0 0 1px #ff2bd6,0 0 30px rgba(255,43,214,.5)}
+:root[data-theme="cyber"] .pbar{background:rgba(255,255,255,.2)}:root[data-theme="cyber"] .pbar i{background:#faff6a;box-shadow:0 0 12px #faff6a}
+:root[data-theme="cyber"] .player video{box-shadow:0 0 0 1px rgba(0,240,255,.5),0 0 44px rgba(255,43,214,.35)}
+:root[data-theme="cyber"] .perks span{border-radius:6px;background:rgba(14,8,32,.8);border-color:rgba(0,240,255,.4)}
+:root[data-theme="cyber"] .err{color:#ff4d6d}:root[data-theme="cyber"] .ok{color:#39ff88}
+:root[data-theme="cyber"] .foot{color:#7dd8e6;text-transform:uppercase;letter-spacing:.14em;font-size:11px}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 </head>
@@ -308,7 +393,7 @@ h1,h2,h3{letter-spacing:-.02em}
 <div class="blob b1"></div><div class="blob b2"></div>
 <header>
   <div class="logo"><b>N</b><div>Nurislam<span>Teaches</span></div></div>
-  <div class="right"><button class="pill icon" id="themeBtn" type="button" aria-label="Switch day or night mode">🌙</button><nav id="nav" class="hide"><button id="tL" class="on">Lessons</button><button id="tB">🏆 Leaderboard</button><button id="tA" class="hide">Admin</button></nav><span class="ava hide" id="ava"></span><button class="pill hide" id="out">Log out</button></div>
+  <div class="right"><div class="themes" role="group" aria-label="Theme"><button type="button" data-th="dark" title="Night mode">🌙</button><button type="button" data-th="cyber" title="Cyberpunk mode">⚡</button></div><nav id="nav" class="hide"><button id="tL" class="on">Lessons</button><button id="tB">🏆 Leaderboard</button><button id="tA" class="hide">Admin</button></nav><span class="ava hide" id="ava"></span><button class="pill hide" id="out">Log out</button></div>
 </header>
 
 <div id="login" class="login">
@@ -390,13 +475,13 @@ const SUPABASE_ANON_KEY='sb_publishable_Zz8iBHd7mwIwIs33WFsD8w_9biFTX2c';
 /* ============================================ */
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 const $=id=>document.getElementById(id);
-function curTheme(){return document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}
-function paintTheme(){$('themeBtn').textContent=curTheme()==='dark'?'☀️':'🌙'}
-$('themeBtn').onclick=()=>{const n=curTheme()==='dark'?'light':'dark';document.documentElement.dataset.theme=n;try{localStorage.setItem('nt-theme',n)}catch(e){}paintTheme()};
+function curTheme(){return document.documentElement.dataset.theme==='cyber'?'cyber':'dark'}
+function paintTheme(){const t=curTheme();document.querySelectorAll('.themes button').forEach(b=>b.classList.toggle('on',b.dataset.th===t))}
+document.querySelectorAll('.themes button').forEach(b=>b.onclick=()=>{document.documentElement.dataset.theme=b.dataset.th;try{localStorage.setItem('nt-theme',b.dataset.th)}catch(e){}paintTheme()});
 paintTheme();
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const emailOf=u=>u.toLowerCase().trim()+'@nurislamteaches.app';
-let lessons=[],students=[],me=null,filter='All',mode='S',myHw={},xpMap={},tested={},hasTest={};
+let lessons=[],students=[],me=null,filter='All',mode='S',myHw={},xpMap={},tested={},hasTest={},watched={};
 const MAXMB=500,LEVELS=['Beginner','Elementary','Pre-Intermediate','Intermediate','Advanced'];
 ['aLv','sL'].forEach(id=>$(id).innerHTML=LEVELS.map(x=>`<option>${x}</option>`).join(''));$('aLv').value='Intermediate';
 const GROUPS=Array.from({length:31},(_,i)=>'Junior '+(i+1));
@@ -459,7 +544,7 @@ function render(){
   $('empty').classList.toggle('hide',list.length>0);
   const hs=h=>!h?'To do':h.status==='checked'?'✓ Checked'+(h.grade?' · '+esc(h.grade):''):'Waiting for check',hcls=h=>!h?'':h.status==='checked'?'hw-done':'hw-wait';
   $('grid').innerHTML=list.map(l=>{
-    const h=myHw[l.id],done=!adm&&!!h&&h.status==='checked',vd=!adm&&vDone(l),td=!adm&&tDone(l),open=adm||(vd&&td);
+    const h=myHw[l.id],done=!adm&&!!h&&h.status==='checked',vd=!adm&&vDone(l),td=!adm&&tDone(l),open=adm||vd;
     const steps=adm?'':`<div class="steps"><span class="${vd?'ok':''}">${vd?'✓ ':''}🎬 Video</span>${hasTest[l.id]?`<span class="${vd&&td?'ok':''}">${vd&&td?'✓ ':''}✅ Test</span>`:''}<span class="${done?'ok':''}">${done?'✓ ':''}📝 Homework</span></div>`;
     return `<div class="lgroup ${adm?'':hcls(h)}"><div class="topic" data-id="${l.id}"><span class="tn">${l.n}</span><div><h3>${esc(l.title)}</h3><p>${esc(l.description)}</p>${steps}</div><span class="tag" data-l="${LEVELS.indexOf(l.level)}" style="margin:0">${esc(l.level)}</span><i>›</i></div>`
       +`<div class="topic hwsub ${open?'':'locked'}" data-hw="${l.id}"><span class="tn" style="background:var(--acc2);font-size:20px">${done?'✓':open?'📝':'🔒'}</span><div><h3>${esc(l.title)} (Homework)</h3><p>${esc(l.homework_task||'Send your homework for this lesson')}</p></div><span class="tag" style="margin:0">${adm?'Homework':open?hs(h):'🔒 After the lesson'}</span><i>›</i></div></div>`}).join('');
@@ -634,10 +719,13 @@ function renderLb(){
   $('lbList').innerHTML=html}
 /* ---- lesson flow: watch -> start test -> homework ---- */
 function openL(l){$('pv').src=l.url;$('pt').textContent=l.title;$('pd').textContent=l.description||'';$('pl').textContent=l.level;show('vP');openLesson(l)}
-const vDone=l=>isWatched(l),tDone=l=>!hasTest[l.id]||!!tested[l.id];
-async function loadProgress(){tested={};hasTest={};if(!me||me.role!=='student')return;
-  const [r,q]=await Promise.all([sb.from('results').select('lesson_id').eq('student_id',me.id),sb.from('questions').select('lesson_id')]);
-  (r.data||[]).forEach(x=>tested[x.lesson_id]=true);(q.data||[]).forEach(x=>hasTest[x.lesson_id]=true)}
+const wd=l=>isWatched(l)||!!watched[l.id],vDone=l=>wd(l)||!!tested[l.id]||!!myHw[l.id],tDone=l=>!hasTest[l.id]||!!tested[l.id];
+async function loadProgress(){tested={};hasTest={};watched={};if(!me||me.role!=='student')return;
+  const [r,q,w]=await Promise.all([sb.from('results').select('lesson_id').eq('student_id',me.id),sb.from('questions').select('lesson_id'),sb.from('lesson_progress').select('lesson_id').eq('student_id',me.id)]);
+  (r.data||[]).forEach(x=>tested[x.lesson_id]=true);(q.data||[]).forEach(x=>hasTest[x.lesson_id]=true);(w.data||[]).forEach(x=>watched[x.lesson_id]=true)}
+function completeWatch(l,hasQ){markWatched(l);watched[l.id]=true;
+  sb.from('lesson_progress').upsert({student_id:me.id,lesson_id:l.id},{onConflict:'student_id,lesson_id',ignoreDuplicates:true}).then(()=>{},()=>{});
+  renderFlow(l,hasQ,true)}
 let maxT=0;
 const wkey=l=>'nt-watched:'+(me?me.id:'')+':'+l.id;
 function isWatched(l){try{return localStorage.getItem(wkey(l))==='1'}catch(e){return false}}
@@ -651,12 +739,13 @@ async function openLesson(l){
   const v=$('pv'),adm=me.role==='admin';maxT=0;v.playbackRate=1;
   $('testBox').classList.add('hide');$('testBox').innerHTML='';$('flow').innerHTML='';
   const hasQ=await prepTest(l);
-  renderFlow(l,hasQ,adm||isWatched(l));
+  renderFlow(l,hasQ,adm||vDone(l));
   // students: no speeding up, no skipping ahead until the video has been watched once
   v.onratechange=()=>{if(!adm&&v.playbackRate!==1)v.playbackRate=1};
-  v.onseeking=()=>{if(!adm&&!isWatched(l)&&v.currentTime>maxT+1.5)v.currentTime=maxT};
-  v.ontimeupdate=()=>{if(v.currentTime>maxT&&v.currentTime<maxT+2)maxT=v.currentTime};
-  v.onended=()=>{if(!adm)markWatched(l);renderFlow(l,hasQ,true)}}
+  v.onseeking=()=>{if(!adm&&!vDone(l)&&v.currentTime>maxT+1.5)v.currentTime=maxT};
+  v.ontimeupdate=()=>{if(v.currentTime>maxT&&v.currentTime<maxT+2)maxT=v.currentTime;
+    if(!adm&&!vDone(l)&&v.duration&&maxT>=v.duration*.97)completeWatch(l,hasQ)};
+  v.onended=()=>{if(adm)renderFlow(l,hasQ,true);else completeWatch(l,hasQ)}}
 /* ---- student: take the test ---- */
 async function prepTest(l){const box=$('testBox');box.classList.add('hide');box.innerHTML='';
   const {data:qs}=await sb.from('questions').select('*').eq('lesson_id',l.id).order('position');
