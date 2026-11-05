@@ -457,9 +457,6 @@ h1,h2,h3{letter-spacing:-.02em}
         <div class="pfbtns"><button class="btn sm" id="pfPick" type="button">📷 Change photo</button><button class="btn sm ghost hide" id="pfDel" type="button">Remove photo</button></div>
         <input type="file" id="pfFile" accept="image/*" class="hide"><div id="pfMsg" style="margin-top:10px"></div></div>
     </div>
-    <div class="panel"><h2>Change password</h2>
-      <div class="two"><div><label>New password</label><input type="password" id="pw1" autocomplete="new-password"></div><div><label>Repeat it</label><input type="password" id="pw2" autocomplete="new-password"></div></div>
-      <button class="btn" id="pwBtn" type="button">Save password</button><div id="pwMsg"></div></div>
   </section>
   <section id="vA" class="hide">
     <div class="stat"><div><i>🎬</i><b id="nL">0</b>lessons</div><div><i>🎓</i><b id="nS">0</b>students</div><div><i>📝</i><b id="nH">0</b>homework to check</div></div>
@@ -753,11 +750,6 @@ $('pfFile').onchange=async()=>{const f=$('pfFile').files[0];$('pfFile').value=''
 $('pfDel').onclick=async()=>{const m=$('pfMsg'),old=me.avatar_path;if(!old||!confirm('Remove your profile photo?'))return;
   const {error}=await sb.rpc('set_my_avatar',{p_path:null});if(error){m.className='err';m.textContent=error.message;return}
   sb.storage.from('avatars').remove([old]);me.avatar_path=null;paintAva();paintProfile();m.className='ok';m.textContent='Photo removed.'};
-$('pwBtn').onclick=async()=>{const p=$('pw1').value,m=$('pwMsg');m.className='err';
-  if(p.length<6){m.textContent='Use at least 6 characters.';return}
-  if(p!==$('pw2').value){m.textContent='The two passwords are different.';return}
-  const {error}=await sb.auth.updateUser({password:p});if(error){m.textContent=error.message;return}
-  $('pw1').value=$('pw2').value='';m.className='ok';m.textContent='Password changed ✅'};
 /* ---- leaderboard ---- */
 let lb=[],lbTab='all';
 async function loadLb(){const {data}=await sb.rpc('leaderboard');lb=data||[];renderLb()}
