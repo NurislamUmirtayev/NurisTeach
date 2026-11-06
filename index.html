@@ -3,6 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#171310">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="NurislamTeaches">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>NurislamTeaches</title>
 <script>try{var t=localStorage.getItem('nt-theme');document.documentElement.dataset.theme=t==='cyber'?'cyber':'dark'}catch(e){}</script>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
@@ -401,6 +409,16 @@ h1,h2,h3{letter-spacing:-.02em}
 :root[data-theme="cyber"] .pfimg{border-color:#0e0820;box-shadow:0 0 0 3px #ff2bd6,0 0 32px rgba(255,43,214,.65)}
 :root[data-theme="cyber"] .av{border-radius:8px;box-shadow:0 0 14px rgba(0,240,255,.55)}
 @media(max-width:760px){#vU .hero{padding:24px 20px;border-radius:24px}.pf{gap:18px}.pfimg{width:104px;height:104px;font-size:34px}}
+/* app feel when installed */
+body{overscroll-behavior-y:none}
+@media (display-mode: standalone){#installBtn,#iosTip{display:none!important}}
+/* admin: topics */
+.tag.hot{color:#d98f00;background:rgba(242,184,75,.2)}
+:root[data-theme="dark"] .tag.hot,:root[data-theme="cyber"] .tag.hot{color:#ffcf5a;background:rgba(242,184,75,.16)}
+:root[data-theme="cyber"] .tag.hot{border-color:#ffd23f}
+#vA .topic{cursor:pointer}
+#aDetail .panel h2{font-size:26px}
+#hwFilter{margin:0 0 14px}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 </head>
@@ -408,7 +426,7 @@ h1,h2,h3{letter-spacing:-.02em}
 <div class="blob b1"></div><div class="blob b2"></div>
 <header>
   <div class="logo"><b>N</b><div>Nurislam<span>Teaches</span></div></div>
-  <div class="right"><div class="themes" role="group" aria-label="Theme"><button type="button" data-th="dark" title="Night mode">🌙</button><button type="button" data-th="cyber" title="Cyberpunk mode">⚡</button></div><nav id="nav" class="hide"><button id="tL" class="on">Lessons</button><button id="tB">🏆 Leaderboard</button><button id="tP">👤 Profile</button><button id="tA" class="hide">Admin</button></nav><span class="ava hide" id="ava"></span><button class="pill hide" id="out">Log out</button></div>
+  <div class="right"><button class="pill hide" id="installBtn" type="button">📲 Install app</button><div class="themes" role="group" aria-label="Theme"><button type="button" data-th="dark" title="Night mode">🌙</button><button type="button" data-th="cyber" title="Cyberpunk mode">⚡</button></div><nav id="nav" class="hide"><button id="tL" class="on">Lessons</button><button id="tB">🏆 Leaderboard</button><button id="tP">👤 Profile</button><button id="tA" class="hide">Admin</button></nav><span class="ava hide" id="ava"></span><button class="pill hide" id="out">Log out</button></div>
 </header>
 
 <div id="login" class="login">
@@ -424,6 +442,7 @@ h1,h2,h3{letter-spacing:-.02em}
     <label>Password</label><input type="password" id="lp" autocomplete="current-password">
     <button class="btn" id="lb">Log in</button>
     <div class="err" id="le"></div>
+    <p class="hide" id="iosTip" style="margin:14px 0 0;color:var(--mute);font-size:14px">📲 Install on iPhone: tap <b>Share</b> ⬆️ then <b>Add to Home Screen</b>.</p>
   </div>
 </div>
 
@@ -460,34 +479,68 @@ h1,h2,h3{letter-spacing:-.02em}
   </section>
   <section id="vA" class="hide">
     <div class="stat"><div><i>🎬</i><b id="nL">0</b>lessons</div><div><i>🎓</i><b id="nS">0</b>students</div><div><i>📝</i><b id="nH">0</b>homework to check</div></div>
-    <div class="panel">
-      <h2>Add a student</h2><p style="color:var(--mute);margin:0">Create a username and password, then send them to your student.</p>
-      <div class="two"><div><label>Full name</label><input type="text" id="sN"></div><div><label>Username</label><input type="text" id="sU" autocapitalize="off"></div></div>
-      <label>Password</label><div style="display:flex;gap:8px"><input type="text" id="sP"><button class="btn sm" id="gen" type="button" style="background:var(--acc2)">Generate</button></div>
-      <label>English level</label><select id="sL"></select>
-      <label>Group</label><select id="sG"></select>
-      <button class="btn" id="sB">Add student</button><div id="sM"></div>
+    <div id="aTabs" class="levels"><button class="chip on" data-at="topics" type="button">📚 Topics</button><button class="chip" data-at="students" type="button">🎓 Students</button><button class="chip" data-at="newlesson" type="button">➕ New lesson</button></div>
+
+    <!-- 1) all topics: tap one to open its homework and test -->
+    <div id="aTopics">
+      <p style="color:var(--mute);margin:0 0 14px">Tap a topic to see the homework students sent and to edit its test.</p>
+      <div id="aList" class="topics"></div>
     </div>
-    <div class="panel"><h2>Students</h2><div id="sList"></div></div>
-    <div class="panel">
-      <h2>Add a lesson</h2>
-      <label>Title</label><input type="text" id="aT" placeholder="e.g. Present Perfect">
-      <label>Description</label><textarea id="aD" placeholder="What will students learn?"></textarea>
-      <div class="two"><div><label>Level</label><select id="aLv"></select></div>
-      <div><label>Video (MP4, up to 500 MB)</label><div class="drop"><input type="file" id="aF" accept="video/*"></div></div></div>
-      <button class="btn" id="aS">Upload lesson</button><div id="aM"></div>
+
+    <!-- 2) one topic: Homework | Test | Lesson -->
+    <div id="aDetail" class="hide">
+      <button class="back" id="aBack" type="button">← All topics</button>
+      <div class="panel"><h2 id="adTitle"></h2><p id="adMeta" style="color:var(--mute);margin:6px 0 0"></p></div>
+      <div id="adTabs" class="levels"><button class="chip on" data-dt="hw" type="button">📝 Homework</button><button class="chip" data-dt="test" type="button">✅ Test</button><button class="chip" data-dt="lesson" type="button">⚙️ Lesson</button></div>
+
+      <div id="dtHw">
+        <div class="panel"><h3 style="margin:0 0 4px">Homework task</h3><p style="color:var(--mute);margin:0">What should students do after this lesson?</p>
+          <textarea id="hwT" placeholder="e.g. Write 5 sentences using past simple and past perfect."></textarea>
+          <button class="btn" id="saveHw" type="button">Save homework task</button><div id="hwM"></div></div>
+        <div class="panel"><h3 style="margin:0 0 10px">Homework students sent</h3><div id="hwFilter" class="levels"></div><div id="hwList"></div></div>
+      </div>
+
+      <div id="dtTest" class="hide">
+        <div class="panel"><h3 style="margin:0 0 4px">Test questions</h3><p style="color:var(--mute);margin:0">Add multiple-choice questions and tick the correct answer. Saving replaces this lesson's old test.</p>
+          <div id="qb"></div>
+          <button class="btn sm" id="addQ" type="button" style="background:var(--acc2);margin-top:12px">+ Add question</button>
+          <button class="btn" id="saveT" type="button">Save test</button><div id="tM"></div></div>
+      </div>
+
+      <div id="dtLesson" class="hide">
+        <div class="panel"><h3 style="margin:0 0 4px">Lesson details</h3>
+          <label>Title</label><input type="text" id="elT">
+          <label>Description</label><textarea id="elD"></textarea>
+          <label>Level</label><select id="elLv"></select>
+          <button class="btn" id="elS" type="button">Save changes</button><div id="elM"></div>
+          <button class="btn sm ghost" id="elDel" type="button" style="margin-top:22px">🗑 Delete this lesson</button></div>
+      </div>
     </div>
-    <div class="panel"><h2>Your lessons</h2><div id="aList"></div></div>
-    <div class="panel"><h2>Lesson test &amp; homework</h2><p style="color:var(--mute);margin:0">Pick a lesson, add multiple-choice questions, tick the correct answer, and save. Saving replaces that lesson's old test.</p>
-      <label>Lesson</label><select id="tLs"></select>
-      <div id="qb"></div>
-      <button class="btn sm" id="addQ" type="button" style="background:var(--acc2);margin-top:12px">+ Add question</button>
-      <button class="btn" id="saveT">Save test</button><div id="tM"></div>
-      <h3 style="margin:26px 0 4px">Homework task</h3><p style="color:var(--mute);margin:0">What should students do after this lesson? (Uses the lesson chosen above.)</p>
-      <textarea id="hwT" placeholder="e.g. Write 5 sentences using past simple and past perfect."></textarea>
-      <button class="btn" id="saveHw">Save homework task</button><div id="hwM"></div>
+
+    <!-- 3) students -->
+    <div id="aStudents" class="hide">
+      <div class="panel">
+        <h2>Add a student</h2><p style="color:var(--mute);margin:0">Create a username and password, then send them to your student.</p>
+        <div class="two"><div><label>Full name</label><input type="text" id="sN"></div><div><label>Username</label><input type="text" id="sU" autocapitalize="off"></div></div>
+        <label>Password</label><div style="display:flex;gap:8px"><input type="text" id="sP"><button class="btn sm" id="gen" type="button" style="background:var(--acc2)">Generate</button></div>
+        <label>English level</label><select id="sL"></select>
+        <label>Group</label><select id="sG"></select>
+        <button class="btn" id="sB">Add student</button><div id="sM"></div>
+      </div>
+      <div class="panel"><h2>Students</h2><div id="sList"></div></div>
     </div>
-    <div class="panel"><h2>Homework to check</h2><div id="hwList"></div></div>
+
+    <!-- 4) new lesson -->
+    <div id="aNew" class="hide">
+      <div class="panel">
+        <h2>Add a lesson</h2>
+        <label>Title</label><input type="text" id="aT" placeholder="e.g. Present Perfect">
+        <label>Description</label><textarea id="aD" placeholder="What will students learn?"></textarea>
+        <div class="two"><div><label>Level</label><select id="aLv"></select></div>
+        <div><label>Video (MP4, up to 500 MB)</label><div class="drop"><input type="file" id="aF" accept="video/*"></div></div></div>
+        <button class="btn" id="aS">Upload lesson</button><div id="aM"></div>
+      </div>
+    </div>
   </section>
 </main>
 <footer class="foot">NurislamTeaches · keep learning ✨</footer>
@@ -507,14 +560,14 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 const emailOf=u=>u.toLowerCase().trim()+'@nurislamteaches.app';
 let lessons=[],students=[],me=null,filter='All',mode='S',myHw={},xpMap={},tested={},hasTest={},watched={};
 const MAXMB=500,LEVELS=['Beginner','Elementary','Pre-Intermediate','Intermediate','Advanced'];
-['aLv','sL'].forEach(id=>$(id).innerHTML=LEVELS.map(x=>`<option>${x}</option>`).join(''));$('aLv').value='Intermediate';
+['aLv','sL','elLv'].forEach(id=>$(id).innerHTML=LEVELS.map(x=>`<option>${x}</option>`).join(''));$('aLv').value='Intermediate';
 const GROUPS=Array.from({length:31},(_,i)=>'Junior '+(i+1));
 $('sG').innerHTML='<option value="">No group</option>'+GROUPS.map(x=>`<option>${x}</option>`).join('');
 
 function show(v){['vL','vP','vH','vB','vU','vA'].forEach(x=>$(x).classList.toggle('hide',x!==v));
   $('tL').classList.toggle('on',v==='vL'||v==='vP'||v==='vH');$('tB').classList.toggle('on',v==='vB');$('tP').classList.toggle('on',v==='vU');$('tA').classList.toggle('on',v==='vA');
   if(v!=='vP'){$('pv').pause();$('testBox').classList.add('hide')}scrollTo(0,0)}
-$('tL').onclick=()=>{render();show('vL')};$('tA').onclick=()=>show('vA');$('back').onclick=()=>{render();show('vL')};
+$('tL').onclick=()=>{render();show('vL')};$('tA').onclick=()=>{show('vA');loadHw()};$('back').onclick=()=>{render();show('vL')};
 ['lu','lp'].forEach(i=>$(i).addEventListener('keydown',e=>{if(e.key==='Enter')$('lb').click()}));
 
 function setMode(m){mode=m;$('mS').classList.toggle('on',m==='S');$('mA').classList.toggle('on',m==='A');$('le').textContent='';
@@ -541,7 +594,7 @@ async function enter(){
   $('tA').classList.toggle('hide',me.role!=='admin');$('who').textContent=me.full_name.split(' ')[0];paintAva();$('ava').classList.remove('hide');document.querySelector('#lbTabs [data-t="grp"]').classList.toggle('hide',me.role==='admin');
   document.querySelector('.hero p').textContent=me.role==='student'?'Your level: '+me.level+'. You can open your level and the levels below it. Open a topic to watch the video and do the test, then its Homework.':'Pick a topic to watch the video and do the test.';
   filter=me.role==='student'?me.level:'All';
-  await loadLessons();await loadMyHw();await loadProgress();if(me.role==='admin'){await loadStudents();loadHw()}
+  await loadLessons();await loadMyHw();await loadProgress();if(me.role==='admin'){await loadStudents();loadHw();loadQCounts()}
   show(me.role==='admin'?'vA':'vL');render();
 }
 $('out').onclick=async()=>{await sb.auth.signOut();me=null;$('lp').value='';['app','nav','out','ava'].forEach(x=>$(x).classList.add('hide'));$('login').classList.remove('hide');$('pv').pause()};
@@ -575,12 +628,8 @@ function render(){
   document.querySelectorAll('[data-hw]').forEach(c=>c.onclick=()=>{const l=lessons.find(x=>x.id===c.dataset.hw);if(c.classList.contains('locked')){openL(l);return}show('vH');openHw(l)});
   if(!adm){const total=lessons.length,dn=lessons.filter(l=>vDone(l)&&tDone(l)&&myHw[l.id]).length;$('prog').innerHTML=total?`<div class="pbar"><i style="width:${Math.round(dn/total*100)}%"></i></div><small>${dn} of ${total} lessons completed</small>`:''}else $('prog').innerHTML='';
   document.querySelectorAll('.topic[data-id]').forEach(c=>c.onclick=()=>{openL(lessons.find(x=>x.id===c.dataset.id))});
-  if(me&&me.role==='admin')fillLs();
-  $('nL').textContent=lessons.length;$('nS').textContent=students.length;
-  $('aList').innerHTML=lessons.length?lessons.map(l=>`<div class="row"><b>${esc(l.title)}</b><span class="tag" data-l="${LEVELS.indexOf(l.level)}" style="margin:0">${esc(l.level)}</span><button class="btn sm ghost" data-dl="${l.id}">Delete</button></div>`).join(''):'<div class="empty">No lessons yet.</div>';
-  document.querySelectorAll('[data-dl]').forEach(b=>b.onclick=async()=>{const l=lessons.find(x=>x.id===b.dataset.dl);if(!confirm('Delete "'+l.title+'"?'))return;
-    await sb.storage.from('videos').remove([l.video_path]);const {error}=await sb.from('lessons').delete().eq('id',l.id);
-    if(error)return alert(error.message);await loadLessons();render()});
+    $('nL').textContent=lessons.length;$('nS').textContent=students.length;
+  if(adm)renderTopics();
   $('sList').innerHTML=students.length?students.map(s=>`<div class="row"><b>${esc(s.full_name)}<br><small>@${esc(s.username)} · ${xpMap[s.id]||0} XP ${s.active?'':'· disabled'}</small></b><select data-gp="${s.id}" style="width:auto;padding:7px 10px"><option value="">No group</option>${GROUPS.map(x=>`<option ${x===s.group_name?'selected':''}>${x}</option>`).join('')}</select><button class="btn sm" data-xp="${s.id}" type="button">± XP</button><select data-lv="${s.id}" style="width:auto;padding:7px 10px">${LEVELS.map(x=>`<option ${x===s.level?'selected':''}>${x}</option>`).join('')}</select><button class="btn sm ghost" data-ts="${s.id}">${s.active?'Disable':'Enable'}</button><button class="btn sm ghost" data-del="${s.id}" type="button">🗑 Delete</button></div>`).join(''):'<div class="empty">No students yet.</div>';
   document.querySelectorAll('[data-ts]').forEach(b=>b.onclick=async()=>{const s=students.find(x=>x.id===b.dataset.ts);
     const {error}=await sb.from('profiles').update({active:!s.active}).eq('id',s.id);if(error)return alert(error.message);await loadStudents();render()});
@@ -613,7 +662,7 @@ $('aS').onclick=async()=>{
   const {error}=await sb.from('lessons').insert({title:t,description:$('aD').value.trim(),level:$('aLv').value,video_path:path});
   b.disabled=false;
   if(error){m.className='err';m.textContent='Failed: '+error.message;return}
-  $('aT').value=$('aD').value=$('aF').value='';m.textContent='Lesson added!';await loadLessons();render();
+  $('aT').value=$('aD').value=$('aF').value='';m.textContent='Lesson added!';document.querySelector('#aTabs [data-at="topics"]').click();await loadLessons();render();
 };
 $('q').oninput=render;
 
@@ -647,18 +696,15 @@ function confetti(){const c=['#c4552d','#2f5d62','#f2b84b','#3cc274','#4a73c9','
 let qn=0;
 function qBlock(q){qn++;const n=qn,o=(q&&q.options)||[];
   return `<div class="qcard"><input type="text" class="qq" placeholder="Question" value="${esc(q?q.question:'')}">`+[0,1,2,3].map(i=>`<div class="opt" style="cursor:default"><input type="radio" name="c${n}" class="qc" value="${i}" ${q&&q.correct===i?'checked':''}><input type="text" class="qo" placeholder="Option ${'ABCD'[i]}" value="${esc(o[i]||'')}"></div>`).join('')+`<button class="btn sm ghost" type="button" data-rq style="margin-top:8px">Remove question</button></div>`}
-function fillLs(){const v=$('tLs').value;$('tLs').innerHTML=lessons.map(l=>`<option value="${l.id}">${esc(l.title)}</option>`).join('');
-  if(v&&lessons.some(l=>l.id===v))$('tLs').value=v;else if(lessons.length&&!v)loadTest()}
-async function loadTest(){const id=$('tLs').value;$('qb').innerHTML='';const L=lessons.find(x=>x.id===id);$('hwT').value=(L&&L.homework_task)||'';if(!id)return;
+async function loadTest(){const id=curLesson;$('qb').innerHTML='';if(!id)return;
   const {data:qs}=await sb.from('questions').select('*').eq('lesson_id',id).order('position');
   if(!qs||!qs.length)return;
   const {data:ks}=await sb.from('question_keys').select('*').in('question_id',qs.map(q=>q.id));
   const km={};(ks||[]).forEach(k=>km[k.question_id]=k.correct);
   $('qb').innerHTML=qs.map(q=>qBlock({...q,correct:km[q.id]})).join('')}
-$('tLs').onchange=loadTest;
 $('addQ').onclick=()=>$('qb').insertAdjacentHTML('beforeend',qBlock());
 $('qb').addEventListener('click',e=>{if(e.target.dataset.rq!==undefined)e.target.closest('.qcard').remove()});
-$('saveT').onclick=async()=>{const m=$('tM'),id=$('tLs').value;m.className='err';
+$('saveT').onclick=async()=>{const m=$('tM'),id=curLesson;m.className='err';
   if(!id){m.textContent='Add a lesson first.';return}
   const items=[];
   for(const b of document.querySelectorAll('#qb .qcard')){
@@ -675,23 +721,61 @@ $('saveT').onclick=async()=>{const m=$('tM'),id=$('tLs').value;m.className='err'
     if(!r.error)r=await sb.from('question_keys').insert(r.data.map(q=>({question_id:q.id,correct:items[q.position].correct})))}
   $('saveT').disabled=false;
   if(r.error){m.className='err';m.textContent='Failed: '+r.error.message;return}
-  m.textContent=items.length?'Test saved!':'Test removed.'};
+  qCount[id]=items.length;renderTopics();m.textContent=items.length?'Test saved!':'Test removed.'};
 /* ---- admin: homework task + checking ---- */
-$('saveHw').onclick=async()=>{const id=$('tLs').value,m=$('hwM');m.className='err';if(!id){m.textContent='Add a lesson first.';return}
+$('saveHw').onclick=async()=>{const id=curLesson,m=$('hwM');m.className='err';if(!id){m.textContent='Add a lesson first.';return}
   const t=$('hwT').value.trim()||null;const {error}=await sb.from('lessons').update({homework_task:t}).eq('id',id);
   if(error){m.textContent='Failed: '+error.message;return}
   const L=lessons.find(x=>x.id===id);if(L)L.homework_task=t;m.className='ok';m.textContent='Homework task saved!'};
 async function loadHw(){
-  const {data}=await sb.from('homework').select('*,profiles(full_name,username),lessons(title)').order('created_at',{ascending:false}).limit(50);
-  const rows=data||[],paths=rows.filter(r=>r.file_path).map(r=>r.file_path),um={};
-  if(paths.length){const {data:u}=await sb.storage.from('homework').createSignedUrls(paths,7200);(u||[]).forEach(x=>um[x.path]=x.signedUrl)}
-  const {data:xd}=await sb.from('xp_log').select('student_id,lesson_id,points').eq('reason','homework');const xm={};(xd||[]).forEach(x=>xm[x.student_id+'|'+x.lesson_id]=x.points);
-  rows.sort((a,b)=>(a.status==='submitted'?0:1)-(b.status==='submitted'?0:1));
-  $('nH').textContent=rows.filter(r=>r.status==='submitted').length;
-  $('hwList').innerHTML=rows.length?rows.map(r=>`<div class="qcard" data-h="${r.id}"><b>${esc(r.profiles&&r.profiles.full_name)}</b> <small style="color:var(--mute)">· ${esc(r.lessons&&r.lessons.title)} · ${new Date(r.created_at).toLocaleString()}</small> <span class="tag" style="margin:0 0 0 8px">${r.status==='checked'?'Checked':'Waiting'}</span>`
+  const {data}=await sb.from('homework').select('*,profiles(full_name,username,group_name)').order('created_at',{ascending:false}).limit(500);
+  hwRows=data||[];hwUrl={};
+  const paths=hwRows.filter(r=>r.file_path).map(r=>r.file_path);
+  if(paths.length){const {data:u}=await sb.storage.from('homework').createSignedUrls(paths,7200);(u||[]).forEach(x=>hwUrl[x.path]=x.signedUrl)}
+  const {data:xd}=await sb.from('xp_log').select('student_id,lesson_id,points').eq('reason','homework');hwXp={};(xd||[]).forEach(x=>hwXp[x.student_id+'|'+x.lesson_id]=x.points);
+  hwRows.sort((a,b)=>(a.status==='submitted'?0:1)-(b.status==='submitted'?0:1));
+  $('nH').textContent=hwRows.filter(r=>r.status==='submitted').length;
+  renderTopics();renderHwDetail()}
+function hwCard(r){const pr=r.profiles||{};
+  return `<div class="qcard" data-h="${r.id}"><b>${esc(pr.full_name)}</b> <small style="color:var(--mute)">· ${esc(pr.group_name||'No group')} · ${new Date(r.created_at).toLocaleString()}</small> <span class="tag ${r.status==='checked'?'':'hot'}" style="margin:0 0 0 8px">${r.status==='checked'?'✓ Checked':'Waiting'}</span>`
     +(r.answer?`<p style="white-space:pre-wrap;margin:8px 0">${esc(r.answer)}</p>`:'')
-    +(r.file_path?`<p style="margin:6px 0"><a href="${esc(um[r.file_path]||'#')}" target="_blank" rel="noopener" style="color:var(--acc)">📎 Open attached file</a></p>`:'')
-    +`<div class="two"><div><label>Grade</label><input type="text" class="hg" value="${esc(r.grade)}" placeholder="e.g. 8/10"></div><div><label>XP (0–70)</label><input type="number" class="hx" min="0" max="70" value="${xm[r.student_id+'|'+r.lesson_id]??70}"></div></div><label>Feedback</label><textarea class="hf" placeholder="Write feedback for the student">${esc(r.feedback)}</textarea><button class="btn sm" data-ck="${r.id}" style="margin-top:10px">${r.status==='checked'?'Update':'Mark as checked'}</button></div>`).join(''):'<div class="empty">No homework yet.</div>'}
+    +(r.file_path?`<p style="margin:6px 0"><a href="${esc(hwUrl[r.file_path]||'#')}" target="_blank" rel="noopener" style="color:var(--acc)">📎 Open attached file</a></p>`:'')
+    +`<div class="two"><div><label>Grade</label><input type="text" class="hg" value="${esc(r.grade)}" placeholder="e.g. 8/10"></div><div><label>XP (0–70)</label><input type="number" class="hx" min="0" max="70" value="${hwXp[r.student_id+'|'+r.lesson_id]??70}"></div></div><label>Feedback</label><textarea class="hf" placeholder="Write feedback for the student">${esc(r.feedback)}</textarea><button class="btn sm" data-ck="${r.id}" style="margin-top:10px">${r.status==='checked'?'Update':'Mark as checked'}</button></div>`}
+function renderHwDetail(){if(!curLesson)return;
+  const all=hwRows.filter(r=>r.lesson_id===curLesson),todo=all.filter(r=>r.status==='submitted'),done=all.filter(r=>r.status==='checked');
+  $('adMeta').textContent=`${all.length} sent · ${todo.length} to check · ${done.length} checked`;
+  $('hwFilter').innerHTML=[['todo','To check ('+todo.length+')'],['done','Checked ('+done.length+')'],['all','All ('+all.length+')']].map(([k,t])=>`<button class="chip ${hwFilter===k?'on':''}" data-hf="${k}" type="button">${t}</button>`).join('');
+  const rows=hwFilter==='todo'?todo:hwFilter==='done'?done:all;
+  $('hwList').innerHTML=rows.length?rows.map(hwCard).join(''):'<div class="empty">'+(hwFilter==='todo'?'🎉 Nothing to check here.':'No homework here yet.')+'</div>'}
+$('hwFilter').addEventListener('click',e=>{const k=e.target.dataset&&e.target.dataset.hf;if(k){hwFilter=k;renderHwDetail()}});
+/* ---- admin: topics -> homework / test / lesson ---- */
+let curLesson=null,hwFilter='todo',hwRows=[],hwUrl={},hwXp={},qCount={};
+function renderTopics(){
+  const pend={},tot={};hwRows.forEach(r=>{tot[r.lesson_id]=(tot[r.lesson_id]||0)+1;if(r.status==='submitted')pend[r.lesson_id]=(pend[r.lesson_id]||0)+1});
+  $('aList').innerHTML=lessons.length?lessons.map((l,i)=>{const qc=qCount[l.id]||0;return `<div class="topic" data-ad="${l.id}"><span class="tn">${i+1}</span><div><h3>${esc(l.title)}</h3><p>${tot[l.id]||0} homework sent · ${qc} test question${qc===1?'':'s'}</p></div>${pend[l.id]?`<span class="tag hot" style="margin:0">📝 ${pend[l.id]} to check</span>`:''}<span class="tag" data-l="${LEVELS.indexOf(l.level)}" style="margin:0">${esc(l.level)}</span><i>›</i></div>`}).join(''):'<div class="empty">No lessons yet. Add one in “New lesson”.</div>';
+  document.querySelectorAll('[data-ad]').forEach(c=>c.onclick=()=>openTopic(c.dataset.ad))}
+async function loadQCounts(){const {data}=await sb.from('questions').select('lesson_id');qCount={};(data||[]).forEach(x=>qCount[x.lesson_id]=(qCount[x.lesson_id]||0)+1);renderTopics()}
+function setDt(t){document.querySelectorAll('#adTabs .chip').forEach(b=>b.classList.toggle('on',b.dataset.dt===t));
+  [['hw','dtHw'],['test','dtTest'],['lesson','dtLesson']].forEach(([k,id])=>$(id).classList.toggle('hide',k!==t))}
+function openTopic(id){const l=lessons.find(x=>x.id===id);if(!l)return;curLesson=id;
+  $('aTopics').classList.add('hide');$('aTabs').classList.add('hide');$('aDetail').classList.remove('hide');
+  $('adTitle').textContent=l.title;$('elT').value=l.title;$('elD').value=l.description||'';$('elLv').value=l.level;$('hwT').value=l.homework_task||'';
+  $('hwM').textContent='';$('tM').textContent='';$('elM').textContent='';
+  hwFilter=hwRows.some(r=>r.lesson_id===id&&r.status==='submitted')?'todo':'all';
+  setDt('hw');loadTest();renderHwDetail();scrollTo(0,0)}
+function backToTopics(){curLesson=null;$('aDetail').classList.add('hide');$('aTopics').classList.remove('hide');$('aTabs').classList.remove('hide');renderTopics()}
+$('aBack').onclick=backToTopics;
+$('adTabs').addEventListener('click',e=>{const v=e.target.dataset&&e.target.dataset.dt;if(v)setDt(v)});
+$('aTabs').addEventListener('click',e=>{const v=e.target.dataset&&e.target.dataset.at;if(!v)return;
+  document.querySelectorAll('#aTabs .chip').forEach(b=>b.classList.toggle('on',b.dataset.at===v));
+  $('aTopics').classList.toggle('hide',v!=='topics');$('aStudents').classList.toggle('hide',v!=='students');$('aNew').classList.toggle('hide',v!=='newlesson')});
+$('elS').onclick=async()=>{const m=$('elM'),t=$('elT').value.trim();m.className='err';if(!t){m.textContent='The title cannot be empty.';return}
+  const patch={title:t,description:$('elD').value.trim(),level:$('elLv').value};
+  const {error}=await sb.from('lessons').update(patch).eq('id',curLesson);if(error){m.textContent='Failed: '+error.message;return}
+  Object.assign(lessons.find(x=>x.id===curLesson),patch);$('adTitle').textContent=t;renderTopics();render();m.className='ok';m.textContent='Saved!'};
+$('elDel').onclick=async()=>{const l=lessons.find(x=>x.id===curLesson);if(!l||!confirm('Delete "'+l.title+'" with its test and all homework? This cannot be undone.'))return;
+  await sb.storage.from('videos').remove([l.video_path]);const {error}=await sb.from('lessons').delete().eq('id',l.id);
+  if(error)return alert(error.message);await loadLessons();await loadHw();backToTopics();render()};
 $('hwList').addEventListener('click',async e=>{const id=e.target.dataset&&e.target.dataset.ck;if(!id)return;const c=e.target.closest('.qcard');e.target.disabled=true;
   const xp=Math.min(70,Math.max(0,parseInt(c.querySelector('.hx').value,10)||0));
   const {error}=await sb.rpc('check_homework',{p_id:id,p_grade:c.querySelector('.hg').value.trim()||null,p_feedback:c.querySelector('.hf').value.trim()||null,p_xp:xp});
@@ -721,6 +805,13 @@ async function openHw(l){const box=$('hwBox');box.innerHTML='';
     const {error}=await sb.from('homework').insert({lesson_id:l.id,answer:a||null,file_path:path});
     if(error){r.className='err';r.textContent='Could not send: '+error.message;$('hwS').disabled=false;return}
     await loadMyHw();render();await openHw(l);$('hwR').className='ok';$('hwR').textContent='Homework sent! Your teacher will check it.'}}
+/* ---- install as an app (PWA) ---- */
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+let installEv=null;
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEv=e;$('installBtn').classList.remove('hide')});
+$('installBtn').onclick=async()=>{if(!installEv)return;installEv.prompt();try{await installEv.userChoice}catch(e){}installEv=null;$('installBtn').classList.add('hide')};
+addEventListener('appinstalled',()=>$('installBtn').classList.add('hide'));
+if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!(navigator.standalone||(matchMedia&&matchMedia('(display-mode: standalone)').matches)))$('iosTip').classList.remove('hide');
 /* ---- profile + picture ---- */
 const avUrl=p=>p?sb.storage.from('avatars').getPublicUrl(p).data.publicUrl:'';
 const initials=n=>(n||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
