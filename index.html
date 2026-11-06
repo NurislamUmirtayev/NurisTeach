@@ -419,6 +419,14 @@ body{overscroll-behavior-y:none}
 #vA .topic{cursor:pointer}
 #aDetail .panel h2{font-size:26px}
 #hwFilter{margin:0 0 14px}
+/* homework pictures */
+.hwimgs{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0}
+.hwimg{max-width:100%;max-height:380px;border-radius:14px;border:1px solid var(--line);cursor:zoom-in;object-fit:contain;background:var(--bg)}
+.hwthumb{position:relative}
+.hwthumb img{width:150px;height:112px;object-fit:cover;border-radius:12px;border:1px solid var(--line);cursor:zoom-in;display:block}
+.hwthumb button{position:absolute;top:6px;right:6px;padding:4px 9px!important;background:rgba(0,0,0,.68)!important;color:#fff!important;border:0!important;box-shadow:none!important}
+.lightbox{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.9);display:grid;place-items:center;padding:20px;cursor:zoom-out;animation:rise .25s both}
+.lightbox img{max-width:100%;max-height:100%;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 </head>
@@ -496,7 +504,10 @@ body{overscroll-behavior-y:none}
       <div id="dtHw">
         <div class="panel"><h3 style="margin:0 0 4px">Homework task</h3><p style="color:var(--mute);margin:0">What should students do after this lesson?</p>
           <textarea id="hwT" placeholder="e.g. Write 5 sentences using past simple and past perfect."></textarea>
-          <button class="btn" id="saveHw" type="button">Save homework task</button><div id="hwM"></div></div>
+          <button class="btn" id="saveHw" type="button">Save homework task</button><div id="hwM"></div>
+          <h3 style="margin:26px 0 4px">Pictures for this task</h3><p style="color:var(--mute);margin:0 0 10px">JPG or PNG, up to 100 MB each. Pictures are saved as soon as you add them.</p>
+          <div id="hwImgs" class="hwimgs"></div>
+          <button class="btn sm" id="hwImgPick" type="button" style="background:var(--acc2)">📷 Add pictures</button><input type="file" id="hwImgFile" accept="image/*" multiple class="hide"><div id="hwImgM" style="margin-top:10px"></div></div>
         <div class="panel"><h3 style="margin:0 0 10px">Homework students sent</h3><div id="hwFilter" class="levels"></div><div id="hwList"></div></div>
       </div>
 
@@ -748,6 +759,36 @@ function renderHwDetail(){if(!curLesson)return;
   const rows=hwFilter==='todo'?todo:hwFilter==='done'?done:all;
   $('hwList').innerHTML=rows.length?rows.map(hwCard).join(''):'<div class="empty">'+(hwFilter==='todo'?'🎉 Nothing to check here.':'No homework here yet.')+'</div>'}
 $('hwFilter').addEventListener('click',e=>{const k=e.target.dataset&&e.target.dataset.hf;if(k){hwFilter=k;renderHwDetail()}});
+/* ---- homework task pictures ---- */
+const taskImgUrl=p=>sb.storage.from('task-images').getPublicUrl(p).data.publicUrl;
+function hwImgsHtml(l){const im=(l&&l.homework_images)||[];return im.length?`<div class="hwimgs" style="padding:4px 6px">${im.map(p=>`<img class="hwimg" src="${esc(taskImgUrl(p))}" alt="" loading="lazy" data-zoom>`).join('')}</div>`:''}
+function fitJpeg(file,max){return new Promise((res,rej)=>{const img=new Image(),u=URL.createObjectURL(file);
+  img.onload=()=>{const k=Math.min(1,max/Math.max(img.width,img.height)),w=Math.round(img.width*k),h=Math.round(img.height*k),c=document.createElement('canvas');c.width=w;c.height=h;
+    const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(img,0,0,w,h);URL.revokeObjectURL(u);
+    c.toBlob(b=>b?res(b):rej(new Error('Could not read the picture')),'image/jpeg',.86)};
+  img.onerror=()=>rej(new Error('Could not read this picture (try JPG or PNG).'));img.src=u})}
+function renderHwImgs(){const l=lessons.find(x=>x.id===curLesson),im=(l&&l.homework_images)||[];
+  $('hwImgs').innerHTML=im.length?im.map((p,i)=>`<div class="hwthumb"><img src="${esc(taskImgUrl(p))}" alt="" data-zoom><button type="button" class="btn sm ghost" data-rmimg="${i}" title="Remove picture">✕</button></div>`).join(''):'<span style="color:var(--mute)">No pictures yet.</span>'}
+$('hwImgPick').onclick=()=>$('hwImgFile').click();
+$('hwImgFile').onchange=async()=>{const files=[...$('hwImgFile').files];$('hwImgFile').value='';const m=$('hwImgM'),l=lessons.find(x=>x.id===curLesson);if(!l||!files.length)return;
+  const added=[];let n=0;m.className='';m.textContent='';
+  for(const f of files){
+    if(!/^image\//.test(f.type)){m.className='err';m.textContent=f.name+' is not a picture.';continue}
+    if(f.size>100*1024*1024){m.className='err';m.textContent=f.name+' is over 100 MB.';continue}
+    m.className='ok';m.textContent='Uploading '+(++n)+' of '+files.length+'…';
+    try{const blob=await fitJpeg(f,1800),path=l.id+'/'+Date.now()+'-'+n+'.jpg';
+      const up=await sb.storage.from('task-images').upload(path,blob,{contentType:'image/jpeg'});if(up.error)throw up.error;added.push(path)}
+    catch(e){m.className='err';m.textContent='Could not upload '+f.name+': '+(e.message||e)}}
+  if(!added.length)return;
+  const imgs=[...(l.homework_images||[]),...added],{error}=await sb.from('lessons').update({homework_images:imgs}).eq('id',l.id);
+  if(error){m.className='err';m.textContent='Uploaded, but could not attach: '+error.message;return}
+  l.homework_images=imgs;renderHwImgs();m.className='ok';m.textContent=added.length+' picture'+(added.length>1?'s':'')+' added ✅'};
+$('hwImgs').addEventListener('click',async e=>{const i=e.target.dataset&&e.target.dataset.rmimg;if(i===undefined)return;
+  const l=lessons.find(x=>x.id===curLesson);if(!l||!confirm('Remove this picture?'))return;
+  const imgs=[...(l.homework_images||[])],gone=imgs.splice(+i,1)[0];
+  const {error}=await sb.from('lessons').update({homework_images:imgs}).eq('id',l.id);if(error){alert(error.message);return}
+  l.homework_images=imgs;if(gone)sb.storage.from('task-images').remove([gone]);renderHwImgs()});
+document.addEventListener('click',e=>{const t=e.target;if(t.tagName==='IMG'&&t.dataset&&t.dataset.zoom!==undefined){const o=document.createElement('div');o.className='lightbox';o.innerHTML='<img src="'+t.src+'" alt="">';o.onclick=()=>o.remove();document.body.appendChild(o)}});
 /* ---- admin: topics -> homework / test / lesson ---- */
 let curLesson=null,hwFilter='todo',hwRows=[],hwUrl={},hwXp={},qCount={};
 function renderTopics(){
@@ -760,7 +801,7 @@ function setDt(t){document.querySelectorAll('#adTabs .chip').forEach(b=>b.classL
 function openTopic(id){const l=lessons.find(x=>x.id===id);if(!l)return;curLesson=id;
   $('aTopics').classList.add('hide');$('aTabs').classList.add('hide');$('aDetail').classList.remove('hide');
   $('adTitle').textContent=l.title;$('elT').value=l.title;$('elD').value=l.description||'';$('elLv').value=l.level;$('hwT').value=l.homework_task||'';
-  $('hwM').textContent='';$('tM').textContent='';$('elM').textContent='';
+  $('hwM').textContent='';$('tM').textContent='';$('elM').textContent='';$('hwImgM').textContent='';renderHwImgs();
   hwFilter=hwRows.some(r=>r.lesson_id===id&&r.status==='submitted')?'todo':'all';
   setDt('hw');loadTest();renderHwDetail();scrollTo(0,0)}
 function backToTopics(){curLesson=null;$('aDetail').classList.add('hide');$('aTopics').classList.remove('hide');$('aTabs').classList.remove('hide');renderTopics()}
@@ -787,10 +828,10 @@ async function loadMyHw(){myHw={};if(!me||me.role!=='student')return;
 $('hwBack').onclick=async()=>{await loadMyHw();render();show('vL')};
 /* ---- student: send homework ---- */
 async function openHw(l){const box=$('hwBox');box.innerHTML='';
-  if(me.role==='admin'){box.innerHTML=`<h2 style="margin:6px 6px 0">Homework: ${esc(l.title)}</h2><p style="margin:4px 6px 0;color:var(--mute);white-space:pre-wrap">${esc(l.homework_task||'No homework task written yet.')}</p><p style="margin:16px 6px 6px;color:var(--mute)">👀 This is what students see. You check their answers in <b>Admin → Homework to check</b>.</p>`;return}
+  if(me.role==='admin'){box.innerHTML=`<h2 style="margin:6px 6px 0">Homework: ${esc(l.title)}</h2><p style="margin:4px 6px 0;color:var(--mute);white-space:pre-wrap">${esc(l.homework_task||'No homework task written yet.')}</p>${hwImgsHtml(l)}<p style="margin:16px 6px 6px;color:var(--mute)">👀 This is what students see. You check their answers in <b>Admin → Homework to check</b>.</p>`;return}
   const {data:old}=await sb.from('homework').select('*').eq('lesson_id',l.id).order('created_at',{ascending:false});
   const mine=(old||[]).filter(h=>h.student_id===me.id);
-  box.innerHTML=`<h2 style="margin:6px 6px 0">Homework: ${esc(l.title)}</h2><p style="margin:4px 6px 0;color:var(--mute);white-space:pre-wrap">${esc(l.homework_task||'Write your answer below or attach a file.')}</p><span class="tag" style="margin:10px 6px 0">⭐ Up to 70 XP</span>
+  box.innerHTML=`<h2 style="margin:6px 6px 0">Homework: ${esc(l.title)}</h2><p style="margin:4px 6px 0;color:var(--mute);white-space:pre-wrap">${esc(l.homework_task||'Write your answer below or attach a file.')}</p><span class="tag" style="margin:10px 6px 0">⭐ Up to 70 XP</span>${hwImgsHtml(l)}
   <div style="padding:6px"><label>Your answer</label><textarea id="hwA" placeholder="Type your homework here…"></textarea><label>Attach a file (optional, up to 20 MB)</label><div class="drop"><input type="file" id="hwF"></div><button class="btn" id="hwS">Send homework</button><div id="hwR" style="margin-top:8px"></div></div>`
   +(mine.length?`<h3 style="margin:14px 6px 0">Your sent homework</h3>`+mine.map(h=>`<div class="qcard" style="margin:10px 6px;${h.status==='checked'?'border-color:#2e9e5b;background:color-mix(in srgb,#2e9e5b 10%,transparent)':''}"><span class="tag" style="margin:0">${h.status==='checked'?'Checked'+(h.grade?' · '+esc(h.grade):''):'Waiting for check'}</span> <small style="color:var(--mute)">${new Date(h.created_at).toLocaleString()}</small>${h.answer?`<p style="white-space:pre-wrap;margin:8px 0 0">${esc(h.answer)}</p>`:''}${h.feedback?`<p style="margin:8px 0 0"><b>Teacher:</b> ${esc(h.feedback)}</p>`:''}</div>`).join(''):'');
   box.classList.remove('hide');
